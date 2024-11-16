@@ -7,7 +7,7 @@ def ok():
     # print(f"句柄：{hwnd}")
     # print(f"标题：{title}")
     try:
-        myTools.hwnd = hwnd
+        myTools.hwnd = int(hwnd)
         myTools.title = title.replace("元梦之星", "已控制")
         # print(f"句柄：{myTools.hwnd}")
         # print(f"标题：{myTools.title}")
@@ -18,7 +18,7 @@ def ok():
         # 窗口获取焦点
         # win32gui.SetForegroundWindow(hwnd)
         # 修改窗口大小
-        win32gui.MoveWindow(hwnd, rect[0], rect[1], 1000, 593, False)
+        win32gui.MoveWindow(myTools.hwnd, rect[0], rect[1], 1000, 593, False)
         # win32gui.SetWindowPos(
         #     hwnd,
         #     win32con.HWND_BOTTOM,

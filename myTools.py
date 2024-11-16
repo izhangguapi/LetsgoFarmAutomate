@@ -1,7 +1,10 @@
 import datetime, threading, win32gui, win32api, win32con, win32ui, json, os, ctypes
 from paddleocr import PaddleOCR
+import win32clipboard as w
+from ctypes import windll
 from PIL import Image
 import tkinter as tk
+
 
 hwnd = None
 title = None
@@ -16,7 +19,7 @@ lgf_config = {
     "fishpond_enable": True,
     "fishpond_timer": False,
     "fishpond_time": "",
-    "loop_s": 120,
+    "loop_s": 538,
     "prayers_enable": False,
     "prayers_time": "",
     "prayers_uid": [],
@@ -53,31 +56,31 @@ class WindowController:
     def __init__(self, hwnd):
         self.hwnd = hwnd
 
-    # 模拟一次按键的输入，间隔值默认0秒
     def key_press(self, key: str, interval=0.1):
+        """模拟一次按键的输入，间隔值默认0.1秒"""
         key = ord(key.upper())
         win32api.PostMessage(self.hwnd, win32con.WM_KEYDOWN, key, 0)
         sleep(interval)
         win32api.PostMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
 
-    # 模拟一个按键的按下
     def key_down(self, key: str):
+        """模拟一个按键的按下"""
         key = ord(key.upper())
         win32api.PostMessage(self.hwnd, win32con.WM_KEYDOWN, key, 0)
 
-    # 模拟一个按键的弹起
     def key_up(self, key: str):
+        """模拟一个按键的弹起"""
         key = ord(key.upper())
         win32api.PostMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
 
-    # 模拟鼠标的移动
     def mouse_move(self, position):
+        """模拟鼠标的移动"""
         x, y = position
         point = win32api.MAKELONG(x, y)
         win32api.PostMessage(self.hwnd, win32con.WM_MOUSEMOVE, None, point)
 
-    # 模拟鼠标的按键抬起
     def mouse_up(self, position, button="L"):
+        """模拟鼠标的按键抬起"""
         x, y = position
         button = button.upper()
         point = win32api.MAKELONG(x, y)
@@ -90,8 +93,8 @@ class WindowController:
                 self.hwnd, win32con.WM_RBUTTONUP, win32con.MK_RBUTTON, point
             )
 
-    # 模拟鼠标的按键按下
     def mouse_down(self, position, button="L"):
+        """模拟鼠标的按键按下"""
         x, y = position
         button = button.lower()
         point = win32api.MAKELONG(x, y)
@@ -104,8 +107,8 @@ class WindowController:
                 self.hwnd, win32con.WM_RBUTTONDOWN, win32con.MK_RBUTTON, point
             )
 
-    # 模拟鼠标的左键双击
     def mouse_double(self, position):
+        """模拟鼠标的左键双击"""
         x, y = position
         point = win32api.MAKELONG(x, y)
         win32api.PostMessage(
@@ -115,8 +118,8 @@ class WindowController:
             self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, point
         )
 
-    # 模拟鼠标移动到坐标，并进行左键单击
     def mouse_move_press(self, position):
+        """模拟鼠标移动到坐标，并进行左键单击"""
         x, y = position
         point = win32api.MAKELONG(x, y)
         win32api.PostMessage(self.hwnd, win32con.WM_MOUSEMOVE, None, point)
@@ -127,8 +130,8 @@ class WindowController:
             self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, point
         )
 
-    # 模拟鼠标移动到坐标，并进行左键双击
     def mouse_move_press_double(self, position):
+        """模拟鼠标移动到坐标，并进行左键双击"""
         x, y = position
         point = win32api.MAKELONG(x, y)
         win32api.PostMessage(self.hwnd, win32con.WM_MOUSEMOVE, None, point)
@@ -139,46 +142,31 @@ class WindowController:
             self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, point
         )
 
-    # 截取窗口
     def screenshot_window(self, position=None):
-        x = 0
-        y = 0
-        width = 0
-        height = 0
-        if position:
-            x, y, width, height = position
-        else:
-            l, t, r, b = win32gui.GetWindowRect(self.hwnd)
-            width = r - l
-            height = b - t
+        """截取整个窗口，传参就是截取该区域的图片，"""
+        # 如果使用高 DPI 显示器（或 > 100% 缩放尺寸），添加下面一行，否则注释掉
+        # windll.user32.SetProcessDPIAware()
 
-        # 获取窗口的设备上下文（DC）
+        left, top, right, bot = win32gui.GetClientRect(self.hwnd)
+        w = right - left
+        h = bot - top
+
         hwndDC = win32gui.GetWindowDC(self.hwnd)
-        mfcDC = win32ui.CreateDCFromHandle(hwndDC)
-        saveDC = mfcDC.CreateCompatibleDC()
+        # 根据窗口句柄获取窗口的设备上下文DC（Divice Context）
+        mfcDC = win32ui.CreateDCFromHandle(hwndDC)  # 根据窗口的DC获取mfcDC
+        saveDC = mfcDC.CreateCompatibleDC()  # mfcDC创建可兼容的DC
 
-        # 创建一个空的位图对象
-        saveBitMap = win32ui.CreateBitmap()
-        saveBitMap.CreateCompatibleBitmap(mfcDC, width, height)
-        saveDC.SelectObject(saveBitMap)
+        saveBitMap = win32ui.CreateBitmap()  # 创建bitmap准备保存图片
+        saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)  # 为bitmap开辟空间
 
-        # 将窗口内容拷贝到位图对象中
-        # result = ctypes.windll.user32.PrintWindow(self.hwnd, saveDC.GetSafeHdc(), 0)
-        saveDC.BitBlt((0, 0), (width, height), mfcDC, (x, y), win32con.SRCCOPY)
-        # print("截图结果：", result)
+        saveDC.SelectObject(saveBitMap)  # 高度saveDC，将截图保存到saveBitmap中
 
+        # 选择合适的 window number，如0，1，2，3，直到截图从黑色变为正常画面
+        result = windll.user32.PrintWindow(self.hwnd, saveDC.GetSafeHdc(), 3)
         # 从位图对象中保存图像
         bmpinfo = saveBitMap.GetInfo()
         bmpstr = saveBitMap.GetBitmapBits(True)
 
-        # 释放资源
-        win32gui.DeleteObject(saveBitMap.GetHandle())
-        saveDC.DeleteDC()
-        mfcDC.DeleteDC()
-        win32gui.ReleaseDC(self.hwnd, hwndDC)
-
-        # print_log("截图结果：", result)
-        # if result == 1:
         img = Image.frombuffer(
             "RGB",
             (bmpinfo["bmWidth"], bmpinfo["bmHeight"]),
@@ -188,12 +176,27 @@ class WindowController:
             0,
             1,
         )
-        # img.show()
-        img_path = os.path.join(
-            os.environ.get("TEMP"), get_datetime().replace(":", "_") + ".png"
-        )
-        img.save(img_path)
-        return img_path
+        # 释放资源
+        win32gui.DeleteObject(saveBitMap.GetHandle())
+        saveDC.DeleteDC()
+        mfcDC.DeleteDC()
+        win32gui.ReleaseDC(self.hwnd, hwndDC)
+
+        if result == 1:
+            # print(position)
+            # 如果有坐标就截取坐标
+            if position:
+                img = img.crop(position)
+            # img.show()
+            # 定义图片路径
+            img_path = os.path.join(
+                os.environ.get("TEMP"), get_datetime().replace(":", "_") + ".png"
+            )
+            # 保存图片并返回
+            img.save(img_path)
+            return img_path
+        else:
+            print("未能截取窗口")
 
 
 def get_datetime():
@@ -202,6 +205,7 @@ def get_datetime():
 
 
 def get_position():
+    """获取坐标json文件"""
     position = None
     with open("position.json", "r", encoding="utf-8") as file:
         position = json.load(file)
@@ -209,6 +213,7 @@ def get_position():
 
 
 def get_key():
+    """获取按键json文件"""
     key = None
     with open("key.json", "r", encoding="utf-8") as file:
         key = json.load(file)
@@ -372,8 +377,8 @@ def print_log(text, fg="black"):
     save_log(log)
 
 
-# 获取全部窗口句柄
 def get_all_windows():
+    """获取全部窗口句柄"""
     windows = []
 
     def callback(hwnd, windows):
@@ -383,11 +388,12 @@ def get_all_windows():
     return windows
 
 
-# 根据标题寻找窗口
 def find_windows_by_title(title):
+    """根据标题寻找窗口"""
     windows = get_all_windows()
     result = []
     for hwnd in windows:
+        # print(win32gui.GetWindowText(hwnd),hwnd)
         if title in win32gui.GetWindowText(hwnd):
             result.append(hwnd)
     return result

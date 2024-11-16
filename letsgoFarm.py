@@ -6,12 +6,14 @@ def find_drone():
     # 重置位置后，按下a键一秒钟
     wcl.key_press("r")
     mt.print_log("寻找无人机")
-    wcl.key_press("a", 1)
+    mt.sleep(0.5)
+    wcl.key_press("a", 2)
 
 
 def farm_work():
     """无人机前往农场"""
     find_drone()
+    mt.sleep(0.5)
     mt.print_log("无人机前往农场工作")
     wcl.mouse_move_press(position["farm_btn"])
     # mt.sleep(100)
@@ -95,14 +97,13 @@ def fishpond_work():
 #     wcl.key_press("space")
 #     print("钓鱼完成", "green")
 
+
 def all_work():
-    """全部"""
-    for _ in range(10):
-        wcl.mouse_move_press(position["blank"])
-        mt.sleep(0.2)
+    """执行全部工作"""
     find_drone()
     mt.print_log("无人机执行全部工作")
     wcl.key_press("q")
+
 
 def farm():
     """农场"""
@@ -116,6 +117,52 @@ def pasture():
         pasture_work()
 
 
+def ocr_fish():
+    # 走到无人机
+    find_drone()
+    # 点击两下左侧按钮切换到鱼塘
+    for _ in range(2):
+        wcl.mouse_move_press(position["toggle_left"])
+        mt.sleep(0.5)
+    mt.print_log("正在识别鱼塘成熟时间...")
+    # 获取截图的区域
+    position_time = position["time"]
+    # 截图并且获取图片路径
+    img_path = wcl.screenshot_window(position_time)
+    # 识别图片中的时间
+    time = mt.ocr_img(img_path)
+    if len(time) < 1:
+        mt.print_log("未识别到鱼塘成熟时间", "red")
+        # 执行全部
+        all_work()
+        return False
+    mt.print_log(f"识别到信息: {time}", "green")
+    time = time[0]
+    if "可钓" in time:
+        mt.print_log("可以钓鱼", "green")
+        # 重置时间记录
+        clw.set_now()
+        # 执行全部
+        all_work()
+        return True
+    # 将时间转为秒
+    s = mt.convert_to_seconds(time)
+    if s < 100:
+        t = s - 4
+        specific_time = clw.computing_specific_time(seconds=t)
+        mt.print_log("等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green")
+        mt.sleep(t)
+        # 重置时间记录
+        clw.set_now()
+        # 执行全部
+        all_work()
+        return True
+    else:
+        mt.print_log("等待时间超过100秒，跳过")
+        all_work()
+        return False
+
+
 def fishpond():
     """鱼塘"""
     if mt.check_settings("fishpond"):
@@ -124,7 +171,8 @@ def fishpond():
         # 获取截图的区域
         position_time = position["time"]
         # 截图并且获取图片路径
-        img_path = wcl.screenshot_window(position_time)
+        img_path = wcl.screenshot_window()
+        # img_path = wcl.screenshot_window(position_time)
         # 识别图片中的时间
         time = mt.ocr_img(img_path)
         if len(time) < 1:
@@ -138,7 +186,7 @@ def fishpond():
         # 将时间转为秒
         s = mt.convert_to_seconds(time)
         if s < 180:
-            t = s - 3
+            t = s - 4
             specific_time = clw.computing_specific_time(seconds=t)
             mt.print_log(
                 "等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green"
@@ -157,7 +205,6 @@ def cancel_lens_assist():
     for i in lens:
         wcl.mouse_move_press(i)
         mt.sleep(1)
-
 
 
 def go_to(where=None):
@@ -201,8 +248,22 @@ def initialization():
     # 点击一下跳跃
     wcl.mouse_move_press(position["jump"])
     mt.sleep(1)
-    if mt.lgf_config["cancel_lens_assist"]:
-        cancel_lens_assist()
+    # if mt.lgf_config["cancel_lens_assist"]:
+    #     cancel_lens_assist()
+
+
+def preprocessing():
+    """预处理"""
+    # 解除省电模式
+    wcl.mouse_move_press(position["jump"])
+    mt.sleep(1)
+    for _ in range(4):
+        # 关闭好友拉倒身边
+        wcl.mouse_move_press(position["closed"])
+        # 点击空白地方
+        wcl.mouse_move_press(position["blank"])
+        mt.sleep(0.2)
+
 
 def start():
     # 初始化
@@ -211,11 +272,10 @@ def start():
     while not mt.exit_event.is_set():
         # 记录开始时间
         clw.set_now()
-        # 解除省电模式
-        wcl.mouse_move_press(position["jump"])
-        mt.sleep(1)
+        # 前置操作（预处理）
+        preprocessing()
         # 执行鱼塘工作
-        all_work()
+        ocr_fish()
         # 计算耗时
         clw.computing_time()
     mt.print_log("停止挂机")

@@ -49,18 +49,6 @@ def stop_letsgoFarm():
     stop.config(state=tk.DISABLED)
 
 
-def test_1():
-    # print(mt.lgf_config)
-    x = mt.position["socialize"]["x"]
-    y = mt.position["socialize"]["y"]
-    mt.vkb.mouse_move_press(x=x, y=y)
-
-
-def test_2():
-    cw = mt.ControlWindow(mt.hwnd)
-    cw.screenshot_window()
-
-
 # def on_click(event):
 #     window.focus_get()
 
@@ -213,7 +201,7 @@ def create_other_lf():
     run.grid(row=0, column=1)
     # 寻找窗口
     test = tk.Button(other, text="测试按钮")
-    # test.config(command=mt.check_settings)
+    # test.config(command=lgf.ocr_fish)
     test.grid(row=1, column=0)
     stop = tk.Button(other, text="停止程序")
     stop.config(command=stop_letsgoFarm, state=tk.DISABLED)
@@ -247,7 +235,7 @@ def creat():
     settings_lf = tk.LabelFrame(window, text="设置", name="设置")
     settings_lf.grid(row=0, column=3, sticky="nsew")
     loop_s = tk.Entry(settings_lf, width=3)
-    loop_s.insert(0, "120")
+    loop_s.insert(0, "538")
     loop_s.grid(row=0, column=0)
     loop_s.bind("<FocusOut>", focus_out)
     l = tk.Label(settings_lf, text="秒执行一次")
