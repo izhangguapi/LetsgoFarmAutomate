@@ -33,8 +33,8 @@ index = 1
 hwnd.sort()
 if hwnd:
     for i in hwnd:
-        win32gui.MoveWindow(i, x, y, 830, 500, False)
-        x += 830
+        win32gui.MoveWindow(i, x, y, 835, 500, False)
+        x += 835
         if index % 3 == 0:
             x = 0
             y += 500 - 38

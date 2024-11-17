@@ -2,9 +2,11 @@
 
 这是一个用Python写的自动收获星宝农场的程序（主要用于一小时作物、动物、鱼饵）
 
+不支持腾讯手游助手，不支持应用宝，不支持qq模拟器
+
 该程序主要使用了pywin32、paddlepaddle、paddleocr库，使用该程序需要拥有一定的编程基础。
 
-本程序在windows10上运行正常，Windows11有识别不了的问题还未解决。
+本程序在windows10、Windows11上运行正常。
 
 使用的Python版本为3.12.4、3.8.6
 
@@ -38,6 +40,20 @@
    ```shell
    pip3 install -r requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple
    ```
+
+2. 安装Edge浏览器（系统一般自带）
+
+3. 进入open-multiple文件夹，运行open-multiple.bat
+
+4. 输入1之后再输入需要多开的数量
+5. 再次运行open-multiple.bat，输入2
+6. 再次运行open-multiple.bat，输入3
+
+## 如何使用
+
+1. 打开桌面上的元梦之星
+2. 登陆账号进入农场
+3. 运行程序（main.py）
 
 ## 郑重声明
 
