@@ -3,9 +3,11 @@ import tkinter as tk
 from tkinter import ttk
 import myTools as mt
 import letsgoFarm as lgf
+import re
 
 
 def open_select_window():
+    """打开选择窗口"""
     selectWindow.create_window()
     window.wait_window(selectWindow.window)
     # if mt.title != None:
@@ -119,20 +121,6 @@ class CreateLF:
         list_uid = text.get("1.0", "end-1c").split("\n")
         mt.lgf_config["prayers_uid"] = list_uid
 
-    def get_checkbtn(self, event):
-        lf_name = str(event.widget.master).split(".")[-1]
-        if lf_name == "农场":
-            mt.lgf_config["farm_enable"] = self.enable.get()
-            mt.lgf_config["farm_timer"] = self.timer.get()
-        elif lf_name == "牧场":
-            mt.lgf_config["pasture_enable"] = self.enable.get()
-            mt.lgf_config["pasture_timer"] = self.timer.get()
-        elif lf_name == "鱼塘":
-            mt.lgf_config["fishpond_enable"] = self.enable.get()
-            mt.lgf_config["fishpond_timer"] = self.timer.get()
-        else:
-            mt.lgf_config["prayers_enable"] = self.enable.get()
-
     def create(
         self,
         title,
@@ -156,105 +144,129 @@ class CreateLF:
         enable.bind("<Leave>", self.get_checkbtn)
         enable.config(state=tk.DISABLED)
 
-        timer = tk.Checkbutton(self.lf, text=timer_text, variable=self.timer)
-        timer.grid(row=1, column=0, columnspan=5)
-        timer.bind("<Leave>", self.get_checkbtn)
-        timer.config(state=tk.DISABLED)
 
-        h = tk.Entry(self.lf, width=2, name="h")
-        h.grid(row=2, column=0)
-        h.bind("<FocusOut>", self.focus_out)
-        h.bind("<Leave>", self.on_mouse_leave)
-        h.config(state=tk.DISABLED)
+def create_fram_lf():
+    """创建农场标签框架"""
+    lf = tk.LabelFrame(window, text="农场", name="农场")
+    lf.grid(row=0, column=0, padx=(10, 0), pady=5, sticky="nsew")
+    mt.lgf_config["farm_enable"] = tk.BooleanVar(value=True)
+    enable = tk.Checkbutton(lf, text="启用", variable=mt.lgf_config["farm_enable"])
+    enable.grid(row=0, column=0, columnspan=2)
+    # enable.bind("<Leave>", get_checkbtn)
 
-        lbhm = tk.Label(self.lf, text=":")
-        lbhm.grid(row=2, column=1)
-        lbhm.config(state=tk.DISABLED)
+    lable = tk.Label(lf, text="地块数量")
+    lable.grid(row=1, column=0)
+    text = tk.Entry(lf, width=2)
+    text.insert(0, "30")
+    text.grid(row=1, column=1, padx=(0, 5))
+    # text.bind("<FocusOut>", focus_out)
 
-        m = tk.Entry(self.lf, width=2, name="m")
-        m.grid(row=2, column=2)
-        m.bind("<FocusOut>", self.focus_out)
-        m.bind("<Leave>", self.on_mouse_leave)
-        m.config(state=tk.DISABLED)
 
-        lbms = tk.Label(self.lf, text=":")
-        lbms.grid(row=2, column=3)
-        lbms.config(state=tk.DISABLED)
+def create_pasture_lf():
+    """创建牧场标签框架"""
+    lf = tk.LabelFrame(window, text="牧场", name="牧场")
+    lf.grid(row=0, column=1, padx=(5, 0), pady=5, sticky="nsew")
+    mt.lgf_config["pasture_enable"] = tk.BooleanVar(value=True)
+    enable = tk.Checkbutton(lf, text="启用", variable=mt.lgf_config["pasture_enable"])
+    enable.grid(row=0, column=0, columnspan=2)
+    # enable.bind("<Leave>", get_checkbtn)
 
-        s = tk.Entry(self.lf, width=2, name="s")
-        s.grid(row=2, column=4)
-        s.bind("<FocusOut>", self.focus_out)
-        s.bind("<Leave>", self.on_mouse_leave)
-        s.config(state=tk.DISABLED)
+    lable = tk.Label(lf, text="地块数量")
+    lable.grid(row=1, column=0)
+    text = tk.Entry(lf, width=2)
+    text.insert(0, "15")
+    text.grid(row=1, column=1, padx=(0, 5))
+    # text.bind("<FocusOut>", focus_out)
+
+
+def create_fishpond_lf():
+    """创建鱼塘标签框架"""
+    lf = tk.LabelFrame(window, text="鱼塘", name="鱼塘")
+    lf.grid(row=0, column=2, padx=(5, 0), pady=5, sticky="nsew")
+    mt.lgf_config["fishpond_enable"] = tk.BooleanVar(value=True)
+    enable = tk.Checkbutton(lf, text="启用", variable=mt.lgf_config["fishpond_enable"])
+    enable.grid(row=0, column=2)
+    # enable.bind("<Leave>", get_checkbtn)
+
+
+def create_processors_lf():
+    """创建加工器标签框架"""
+    lf = tk.LabelFrame(window, text="加工器", name="加工器")
+    lf.grid(row=0, column=3, padx=(5, 0), pady=5, sticky="nsew")
+    mt.lgf_config["processors_enable"] = tk.BooleanVar(value=True)
+    enable = tk.Checkbutton(
+        lf, text="启用", variable=mt.lgf_config["processors_enable"]
+    )
+    enable.grid(row=0, column=2)
+    # enable.bind("<Leave>", get_checkbtn)
+
+
+def create_settings_lf():
+    """创建设置标签框架"""
+
+    def focus_out(event):
+        var = loop.get()
+        if len(var) > 3:
+            loop.delete(0, "end")
+        try:
+            mt.lgf_config["loops"] = int(var)
+        except:
+            mt.print_log("请输入数字", "red")
+
+    lf = tk.LabelFrame(window, text="设置", name="设置")
+    lf.grid(row=0, column=4, padx=(5, 0), pady=5, sticky="nsew")
+
+    mt.lgf_config["vip"] = tk.BooleanVar(value=True)
+    vip = tk.Checkbutton(lf, text="是否开通月卡", variable=mt.lgf_config["vip"])
+    vip.grid(row=0, column=0, columnspan=2)
+
+    loop = tk.Entry(lf, width=3)
+    loop.insert(0, "538")
+    loop.grid(row=1, column=0)
+    loop.bind("<FocusOut>", focus_out)
+    text = tk.Label(lf, text="秒执行一次")
+    text.grid(row=1, column=1)
 
 
 def create_other_lf():
+    """创建控制标签框架"""
     global select, run, stop
-    other = tk.LabelFrame(window, text="其他")
-    other.grid(row=0, column=4, rowspan=2, sticky="nsew")
+    lf = tk.LabelFrame(window, text="控制")
+    lf.grid(row=0, column=5, padx=5, pady=5, sticky="nsew")
 
-    select = tk.Button(other, text="选择窗口")
+    select = tk.Button(lf, text="选择窗口")
     select.config(command=open_select_window)
-    select.grid(row=0, column=0)
-    run = tk.Button(other, text="开始运行")
-    run.config(command=run_letsgoFarm)
-    run.grid(row=0, column=1)
-    # 寻找窗口
-    test = tk.Button(other, text="测试按钮")
-    # test.config(command=lgf.ocr_fish)
-    test.grid(row=1, column=0)
-    stop = tk.Button(other, text="停止程序")
-    stop.config(command=stop_letsgoFarm, state=tk.DISABLED)
-    stop.grid(row=1, column=1)
+    select.grid(row=0, column=0, padx=(5, 0), pady=5)
 
-    quit = tk.Button(other, text="退出程序")
-    quit.grid(row=2, column=0, columnspan=2, sticky="nsew")
+    run = tk.Button(lf, text="开始运行")
+    run.config(command=run_letsgoFarm)
+    run.grid(row=0, column=1, padx=(5, 0), pady=5)
+    # 测试按钮
+    # test = tk.Button(lf, text="测试按钮")
+    # test.config(command=lgf.ocr_fish)
+    # test.grid(row=1, column=0)
+    stop = tk.Button(lf, text="停止程序")
+    stop.config(command=stop_letsgoFarm, state=tk.DISABLED)
+    stop.grid(row=0, column=2, padx=5, pady=5)
+
+    quit = tk.Button(lf, text="退出程序")
+    quit.grid(row=1, column=0, columnspan=3, padx=5, pady=(0, 5), sticky="nsew")
     quit.config(command=window.quit)
 
 
-def focus_out(event):
-    mt.lgf_config["loop_s"] = int(event.widget.get())
-
-
-def get_lens_enable():
-    mt.lgf_config["cancel_lens_assist"] = lens_enable.get()
-
-
-def creat():
-    global window, lens_enable
+if __name__ == "__main__":
     window = tk.Tk()
     window.title("请选择游戏窗口")
 
-    fram = CreateLF(window)
-    fram.create("农场", 0)
-    pasture = CreateLF(window)
-    pasture.create("牧场", 1)
-    fishpond = CreateLF(window)
-    fishpond.create("鱼塘", 2)
-
-    settings_lf = tk.LabelFrame(window, text="设置", name="设置")
-    settings_lf.grid(row=0, column=3, sticky="nsew")
-    loop_s = tk.Entry(settings_lf, width=3)
-    loop_s.insert(0, "538")
-    loop_s.grid(row=0, column=0)
-    loop_s.bind("<FocusOut>", focus_out)
-    l = tk.Label(settings_lf, text="秒执行一次")
-    l.grid(row=0, column=1, columnspan=3)
-
-    lens_enable = tk.BooleanVar()
-    cancel_lens_enable = tk.Checkbutton(
-        settings_lf, text="取消镜头辅助", variable=lens_enable
-    )
-    cancel_lens_enable.grid(row=1, column=0, columnspan=5)
-    cancel_lens_enable.config(command=get_lens_enable)
-
+    create_fram_lf()
+    create_pasture_lf()
+    create_fishpond_lf()
+    create_processors_lf()
+    create_settings_lf()
     create_other_lf()
 
+    # 创建日志列表
     mt.create_listbox(window)
 
     window.resizable(False, False)
     window.mainloop()
-
-
-if __name__ == "__main__":
-    creat()

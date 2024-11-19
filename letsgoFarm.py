@@ -147,7 +147,7 @@ def ocr_fish():
         return True
     # 将时间转为秒
     s = mt.convert_to_seconds(time)
-    if s < 100:
+    if s < 180:
         t = s - 4
         specific_time = clw.computing_specific_time(seconds=t)
         mt.print_log("等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green")
@@ -158,7 +158,7 @@ def ocr_fish():
         all_work()
         return True
     else:
-        mt.print_log("等待时间超过100秒，跳过")
+        mt.print_log("等待时间超过3分钟，跳过")
         all_work()
         return False
 

@@ -9,21 +9,16 @@ import tkinter as tk
 hwnd = None
 title = None
 exit_event = threading.Event()
+
 lgf_config = {
-    "farm_enable": True,
-    "farm_timer": False,
-    "farm_time": "",
-    "pasture_enable": True,
-    "pasture_timer": False,
-    "pasture_time": "",
-    "fishpond_enable": True,
-    "fishpond_timer": False,
-    "fishpond_time": "",
-    "loop_s": 538,
-    "prayers_enable": False,
-    "prayers_time": "",
-    "prayers_uid": [],
-    "cancel_lens_assist": False,
+    "farm_enable": True,  # 农场启用
+    "farm_plots": 30,  # 农场地块数
+    "pasture_enable": True,  # 牧场启用
+    "pasture_plots": 15,  # 牧场地块数
+    "fishpond_enable": True,  # 鱼塘启用
+    "processors_enable": True,  # 加工期启用
+    "loops": 538,  # 循环时间
+    "vip": True,  # 是否开通农场月卡
 }
 
 
@@ -41,7 +36,7 @@ class CalculationWaiting:
     def computing_time(self):
         self.end_time = datetime.datetime.now()
         time_difference = (self.end_time - self.start_time).total_seconds()
-        s = lgf_config["loop_s"] - time_difference
+        s = lgf_config["loops"] - time_difference
         specific_time = self.computing_specific_time(time=self.end_time, seconds=s)
         print_log(f"本次任务耗时: {time_difference} 秒，休息 {s} 秒", "green")
         print_log(f"下次运行时间: {specific_time}", "green")
@@ -341,8 +336,8 @@ def convert_to_seconds(time):
 def create_listbox(window: tk.Tk):
     """创建列表框"""
     global lb
-    lb = tk.Listbox(window, height=5, font=("Arial", 10))
-    lb.grid(row=2, column=0, columnspan=5, sticky="nsew")
+    lb = tk.Listbox(window, height=6, font=("Arial", 10))
+    lb.grid(row=1, column=0, columnspan=6, sticky="nsew")
 
 
 def delete_top_item():
@@ -359,9 +354,12 @@ current_path = os.path.dirname(os.path.abspath(__file__))
 def save_log(text):
     """保存日志"""
     # 路径
-    path = os.path.join(current_path, "log", log_name)
-    with open(path, "a+", encoding="utf-8") as f:
-        f.write(text + "\n")
+    try:
+        path = os.path.join(current_path, "log", log_name)
+        with open(path, "a+", encoding="utf-8") as f:
+            f.write(text + "\n")
+    except:
+        pass
 
 
 def print_log(text, fg="black"):

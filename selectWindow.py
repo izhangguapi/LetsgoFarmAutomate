@@ -1,24 +1,25 @@
 import tkinter as tk
 from tkinter import ttk
-import myTools, win32gui, win32con
+import myTools as mt
+import win32gui, win32con
 
 
 def ok():
     # print(f"句柄：{hwnd}")
     # print(f"标题：{title}")
     try:
-        myTools.hwnd = int(hwnd)
-        myTools.title = title.replace("元梦之星", "已控制")
-        # print(f"句柄：{myTools.hwnd}")
-        # print(f"标题：{myTools.title}")
+        mt.hwnd = int(hwnd)
+        mt.title = title.replace("元梦之星", "已控制")
+        # print(f"句柄：{mt.hwnd}")
+        # print(f"标题：{mt.title}")
         # 获取窗口的位置和大小
-        rect = win32gui.GetWindowRect(myTools.hwnd)
+        rect = win32gui.GetWindowRect(mt.hwnd)
         # 激活窗口
         # win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
         # 窗口获取焦点
         # win32gui.SetForegroundWindow(hwnd)
         # 修改窗口大小
-        win32gui.MoveWindow(myTools.hwnd, rect[0], rect[1], 1000, 593, False)
+        win32gui.MoveWindow(mt.hwnd, rect[0], rect[1], 1000, 593, False)
         # win32gui.SetWindowPos(
         #     hwnd,
         #     win32con.HWND_BOTTOM,
@@ -30,6 +31,7 @@ def ok():
         # )
         window.destroy()
     except:
+        mt.print_log("请选择窗口后再点击确定", "red")
         print("请选择窗口后再点击确定")
         pass
 
@@ -37,7 +39,7 @@ def ok():
 def get_hwnd():
     tree.delete(*tree.get_children())
 
-    hwnd = myTools.find_windows_by_title("元梦之星")
+    hwnd = mt.find_windows_by_title("元梦之星")
     if hwnd:
         for i in hwnd:
             text = win32gui.GetWindowText(i)
