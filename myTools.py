@@ -1,6 +1,5 @@
-import datetime, threading, win32gui, win32api, win32con, win32ui, json, os, ctypes
+import datetime, threading, win32gui, win32api, win32con, win32ui, json, os
 from paddleocr import PaddleOCR
-import win32clipboard as w
 from ctypes import windll
 from PIL import Image
 import tkinter as tk
@@ -19,6 +18,7 @@ lgf_config = {
     "processors_enable": True,  # 加工期启用
     "loops": 538,  # 循环时间
     "vip": True,  # 是否开通农场月卡
+    "platform": "web",
 }
 
 
@@ -137,6 +137,21 @@ class WindowController:
             self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, point
         )
 
+    def mouse_move_drag(self, position1, position2):
+        """模拟鼠标拖动"""
+        x, y = position1
+        point1 = win32api.MAKELONG(x, y)
+        x, y = position2
+        point2 = win32api.MAKELONG(x, y)
+        win32api.PostMessage(self.hwnd, win32con.WM_MOUSEMOVE, None, point1)
+        win32api.PostMessage(
+            self.hwnd, win32con.WM_LBUTTONDBLCLK, win32con.MK_LBUTTON, point1
+        )
+        win32api.PostMessage(self.hwnd, win32con.WM_MOUSEMOVE, None, point2)
+        win32api.PostMessage(
+            self.hwnd, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, point2
+        )
+
     def screenshot_window(self, position=None):
         """截取整个窗口，传参就是截取该区域的图片，"""
         # 如果使用高 DPI 显示器（或 > 100% 缩放尺寸），添加下面一行，否则注释掉
@@ -204,7 +219,7 @@ def get_position():
     position = None
     with open("position.json", "r", encoding="utf-8") as file:
         position = json.load(file)
-    return position
+    return position[lgf_config["platform"]]
 
 
 def get_key():
@@ -336,7 +351,7 @@ def convert_to_seconds(time):
 def create_listbox(window: tk.Tk):
     """创建列表框"""
     global lb
-    lb = tk.Listbox(window, height=6, font=("Arial", 10))
+    lb = tk.Listbox(window, height=8, font=("Arial", 10))
     lb.grid(row=1, column=0, columnspan=6, sticky="nsew")
 
 

@@ -107,15 +107,21 @@ if __name__ == "__main__":
     try:
         # 获取窗口句柄
         handle = win32gui.FindWindow(
-            None, "元梦之星-云游戏-快捷方式 - 元梦之星-腾讯先锋云游戏 - 208038018"
+            None, "元梦之星"
         )  # 通过窗口标题获取窗口句柄
-        # handle = 10095228
+        handle = 5442702
         print("窗口句柄是：{}".format(handle))
         vkb = VirtualKeyboard(handle)
-        # vkb.mouse_move(100,100)
+        vkb.mouse_move(34,50)
+        time.sleep(1)
+        vkb.mouse_move(34,50)
+        time.sleep(1)
+        vkb.mouse_move(34,50)
+        time.sleep(1)
+        vkb.mouse_move(34,50)
         # vkb.mouse_move_press(50, 50)
-        vkb.key_press("r")
-        vkb.key_press("a", 1)
-        vkb.key_press("w", 3)
+        # vkb.key_press("r")
+        # vkb.key_press("a", 1)
+        # vkb.key_press("w", 3)
     except Exception as e:
         print("窗口句柄获取失败：{}".format(e))

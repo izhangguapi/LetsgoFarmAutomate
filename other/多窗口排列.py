@@ -31,6 +31,7 @@ x = 0
 y = -30
 index = 1
 hwnd.sort()
+# hwnd.remove(196794)
 if hwnd:
     for i in hwnd:
         win32gui.MoveWindow(i, x, y, 835, 500, False)

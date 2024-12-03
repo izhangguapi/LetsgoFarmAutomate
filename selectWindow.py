@@ -15,11 +15,15 @@ def ok():
         # 获取窗口的位置和大小
         rect = win32gui.GetWindowRect(mt.hwnd)
         # 激活窗口
-        # win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
         # 窗口获取焦点
-        # win32gui.SetForegroundWindow(hwnd)
+        win32gui.SetForegroundWindow(hwnd)
         # 修改窗口大小
-        win32gui.MoveWindow(mt.hwnd, rect[0], rect[1], 1000, 593, False)
+        if mt.lgf_config["platform"] == "web":
+            win32gui.MoveWindow(mt.hwnd, rect[0], rect[1], 1000, 591, False)
+        else:
+            win32gui.MoveWindow(mt.hwnd, rect[0], rect[1], 994, 598, False)
+
         # win32gui.SetWindowPos(
         #     hwnd,
         #     win32con.HWND_BOTTOM,

@@ -18,8 +18,12 @@ def open_select_window():
         window.title(title)
         game_rect = win32gui.GetWindowRect(mt.hwnd)
         this_window = win32gui.FindWindowEx(0, 0, None, title)
-        x = game_rect[0]
-        y = game_rect[1] + 585
+        if mt.lgf_config["platform"] == "web":
+            x = game_rect[0]
+            y = game_rect[1] + 584
+        else:
+            x = game_rect[0] - 8
+            y = game_rect[1] + 598
         win32gui.MoveWindow(this_window, x, y, 0, 0, True)
         mt.log_name = (
             str(datetime.datetime.now().strftime("%Y年%m月%d日_%H时%M分%S秒"))
@@ -204,6 +208,12 @@ def create_processors_lf():
 def create_settings_lf():
     """创建设置标签框架"""
 
+    def on_radio_button_selected():
+        # 获取选中的单选按钮的值
+        selected_value = tk.StringVar()
+        selected_value.set(radio_button_value.get())
+        mt.lgf_config["platform"] = selected_value.get()
+
     def focus_out(event):
         var = loop.get()
         if len(var) > 3:
@@ -216,16 +226,36 @@ def create_settings_lf():
     lf = tk.LabelFrame(window, text="设置", name="设置")
     lf.grid(row=0, column=4, padx=(5, 0), pady=5, sticky="nsew")
 
-    mt.lgf_config["vip"] = tk.BooleanVar(value=True)
-    vip = tk.Checkbutton(lf, text="是否开通月卡", variable=mt.lgf_config["vip"])
-    vip.grid(row=0, column=0, columnspan=2)
-
     loop = tk.Entry(lf, width=3)
     loop.insert(0, "538")
-    loop.grid(row=1, column=0)
+    loop.grid(row=0, column=0)
     loop.bind("<FocusOut>", focus_out)
     text = tk.Label(lf, text="秒执行一次")
-    text.grid(row=1, column=1)
+    text.grid(row=0, column=1)
+
+    mt.lgf_config["vip"] = tk.BooleanVar(value=True)
+    vip = tk.Checkbutton(lf, text="是否开通月卡", variable=mt.lgf_config["vip"])
+    vip.grid(row=1, column=0, columnspan=2)
+
+    # 创建单选按钮
+    radio_button_value = tk.StringVar()
+    radio1 = tk.Radiobutton(
+        lf,
+        text="腾讯先锋",
+        variable=radio_button_value,
+        value="web",
+        command=on_radio_button_selected,
+    )
+    radio1.grid(row=2, column=0, columnspan=2)
+    radio2 = tk.Radiobutton(
+        lf,
+        text="应用宝",
+        variable=radio_button_value,
+        value="yyb",
+        command=on_radio_button_selected,
+    )
+    radio2.grid(row=3, column=0, columnspan=2)
+    radio1.select()
 
 
 def create_other_lf():

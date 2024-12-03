@@ -4,10 +4,10 @@ import myTools as mt
 def find_drone():
     """寻找无人机"""
     # 重置位置后，按下a键一秒钟
-    wcl.key_press("r")
+    wcl.mouse_move_press(position["reset"])
     mt.print_log("寻找无人机")
     mt.sleep(0.5)
-    wcl.key_press("a", 2)
+    wcl.key_press("a", 1.5)
 
 
 def farm_work():
@@ -102,7 +102,7 @@ def all_work():
     """执行全部工作"""
     find_drone()
     mt.print_log("无人机执行全部工作")
-    wcl.key_press("q")
+    wcl.mouse_move_press(position["drone_btn"])
 
 
 def farm():
@@ -148,7 +148,7 @@ def ocr_fish():
     # 将时间转为秒
     s = mt.convert_to_seconds(time)
     if s < 180:
-        t = s - 4
+        t = s - 3.5
         specific_time = clw.computing_specific_time(seconds=t)
         mt.print_log("等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green")
         mt.sleep(t)
@@ -163,71 +163,63 @@ def ocr_fish():
         return False
 
 
-def fishpond():
-    """鱼塘"""
-    if mt.check_settings("fishpond"):
-        go_to("fishpond")
-        mt.print_log("正在识别鱼塘成熟时间...")
-        # 获取截图的区域
-        position_time = position["time"]
-        # 截图并且获取图片路径
-        img_path = wcl.screenshot_window()
-        # img_path = wcl.screenshot_window(position_time)
-        # 识别图片中的时间
-        time = mt.ocr_img(img_path)
-        if len(time) < 1:
-            mt.print_log("未识别到时间，跳过", "red")
-            return
-        mt.print_log(f"识别到信息: {time}", "green")
-        time = time[0]
-        if "可钓" in time:
-            fishpond_work()
-            return True
-        # 将时间转为秒
-        s = mt.convert_to_seconds(time)
-        if s < 180:
-            t = s - 4
-            specific_time = clw.computing_specific_time(seconds=t)
-            mt.print_log(
-                "等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green"
-            )
-            mt.sleep(t)
-            fishpond_work()
-            return True
-        else:
-            mt.print_log("等待时间超过3分钟，跳过")
-            return False
+# def fishpond():
+#     """鱼塘"""
+#     if mt.check_settings("fishpond"):
+#         go_to("fishpond")
+#         mt.print_log("正在识别鱼塘成熟时间...")
+#         # 获取截图的区域
+#         position_time = position["time"]
+#         # 截图并且获取图片路径
+#         img_path = wcl.screenshot_window()
+#         # img_path = wcl.screenshot_window(position_time)
+#         # 识别图片中的时间
+#         time = mt.ocr_img(img_path)
+#         if len(time) < 1:
+#             mt.print_log("未识别到时间，跳过", "red")
+#             return
+#         mt.print_log(f"识别到信息: {time}", "green")
+#         time = time[0]
+#         if "可钓" in time:
+#             fishpond_work()
+#             return True
+#         # 将时间转为秒
+#         s = mt.convert_to_seconds(time)
+#         if s < 180:
+#             t = s - 4
+#             specific_time = clw.computing_specific_time(seconds=t)
+#             mt.print_log(
+#                 "等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green"
+#             )
+#             mt.sleep(t)
+#             fishpond_work()
+#             return True
+#         else:
+#             mt.print_log("等待时间超过3分钟，跳过")
+#             return False
 
 
-def cancel_lens_assist():
-    lens = position["lens"]
-    mt.print_log("取消镜头辅助")
-    for i in lens:
-        wcl.mouse_move_press(i)
-        mt.sleep(1)
-
-
-def go_to(where=None):
-    if where == "farm":
-        data = key["go_to_farm"]
-        mt.print_log("前往农场...")
-    elif where == "pasture":
-        data = key["go_to_pasture"]
-        mt.print_log("前往牧场...")
-    elif where == "fishpond":
-        data = key["go_to_fishpond"]
-        mt.print_log("前往鱼塘...")
-        for i in data:
-            if i["type"] == "press":
-                wcl.key_press(i["details"])
-            elif i["type"] == "down":
-                wcl.key_down(i["details"])
-            elif i["type"] == "up":
-                wcl.key_up(i["details"])
-            elif i["type"] == "sleep":
-                mt.sleep(i["details"])
-    else:
-        mt.print_log("未知地点")
+# def go_to(where=None):
+#     if where == "farm":
+#         data = key["go_to_farm"]
+#         mt.print_log("前往农场...")
+#     elif where == "pasture":
+#         data = key["go_to_pasture"]
+#         mt.print_log("前往牧场...")
+#     elif where == "fishpond":
+#         data = key["go_to_fishpond"]
+#         mt.print_log("前往鱼塘...")
+#         for i in data:
+#             if i["type"] == "press":
+#                 wcl.key_press(i["details"])
+#             elif i["type"] == "down":
+#                 wcl.key_down(i["details"])
+#             elif i["type"] == "up":
+#                 wcl.key_up(i["details"])
+#             elif i["type"] == "sleep":
+#                 mt.sleep(i["details"])
+#     else:
+#         mt.print_log("未知地点")
 
 
 def initialization():

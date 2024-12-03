@@ -7,7 +7,7 @@ from PIL import Image
 def photo_capture():
 
     # hwnd = win32gui.FindWindow(None, 'Melvor Idle')  # 获取窗口的句柄
-    hwnd = 1247668  # 或设置窗口句柄
+    hwnd = 5442702  # 或设置窗口句柄
 
     # 如果使用高 DPI 显示器（或 > 100% 缩放尺寸），添加下面一行，否则注释掉
     # windll.user32.SetProcessDPIAware()
