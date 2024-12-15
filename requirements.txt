@@ -3,4 +3,3 @@ paddlepaddle
 paddleocr
 setuptools
 requests
-psutil

@@ -1,6 +1,5 @@
 from paddleocr import PaddleOCR
-import pyautogui, os, time
-from tqdm import tqdm
+import pyautogui
 from myTools import *
 
 
@@ -30,13 +29,14 @@ def screenshot_save(img):
     """
     截图并保存
     """
-    img_path = "images/identify/" + img + ".png"
-    location = pyautogui.locateOnScreen(img_path, confidence=0.7)
+    # img_path = "images/identify/" + img + ".png"
+    # location = pyautogui.locateOnScreen(img_path, confidence=0.7)
     # macos苹果系统专用，没有次行代码会导致截图位置错误，windows请注释下一行
-    location = (location[0] // 2, location[1] // 2, location[2] // 2, location[3] // 2)
+    # location = (location[0] // 2, location[1] // 2, location[2] // 2, location[3] // 2)
     # windows专用，mac请注释下一行
     # location = (int(location[0]), int(location[1]), int(location[2]), int(location[3]))
-    image = pyautogui.screenshot(region=location)
+    left, top, width, height = lgf_config["screenshot"]
+    image = pyautogui.screenshot(region=(left, top, width, height))
     # 保存位置
     image.save("images/temp/" + img + ".png")
 
@@ -50,15 +50,15 @@ def OCR_time(img):
     返回值: 返回图片中时间转为秒，以及图片识别耗时
     """
     # 创建一个PaddleOCR对象
-    ocr = PaddleOCR()
+    ocr = PaddleOCR(show_log=False, lang="ch", use_angle_cls=False)
     # 使用PaddleOCR对象进行图片识别
     img_path = "images/temp/" + img + ".png"
     result = ocr.ocr(img=img_path, cls=False)
-    print_log("识别结果：{}".format(result),"green")
+    print_log("识别结果：{}".format(result), "green")
     # 识别文字，获取耗时
     time = result[0][0][1][0].split("后")[0]
     spend = result[0][0][1][1]
-    print_log("剩余时间：{}，耗时：{}".format(time, spend),"green")
+    print_log("剩余时间：{}，耗时：{}".format(time, spend), "green")
 
     # 将得到的时间转为秒
     h = m = s = 0
@@ -73,5 +73,5 @@ def OCR_time(img):
     if "秒" in time:
         s = int(time.split("秒")[0])
     seconds = h * 3600 + m * 60 + s
-    print_log("转为秒：{}秒".format(seconds),"green")
+    print_log("转为秒：{}秒".format(seconds), "green")
     return seconds - int(spend)

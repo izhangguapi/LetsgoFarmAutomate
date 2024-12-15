@@ -2,13 +2,24 @@ import datetime, pyautogui, threading
 import tkinter as tk
 from tkinter import ttk
 
+exit_event = threading.Event()
+# 日志名称
+log_name = str(datetime.datetime.now().strftime("%Y年%m月%d日_%H时%M分%S秒"))
+
+
+lgf_config = {
+    "loops": 538,  # 循环时间
+    "blank": [1442, 1054],  # 空白位置
+    "reset": [1711, 1007],  # 重置按钮
+    "drone_btn": [1388, 757],  # 无人机按钮
+    "toggle_left": [1455, 901],  # 调整无人机工作按钮
+    "screenshot": [79, 527, 314, 578],  # 识别区域，指定截图区域的左上角和右下角坐标
+}
+
 
 def get_datetime():
     """获取当前日期和时间"""
     return str(datetime.datetime.now())
-
-
-exit_event = threading.Event()
 
 
 def stop_letsgoFarm(btn_a, btn_d):
@@ -31,10 +42,6 @@ def sleep(s):
     except Exception as e:
         print_log(f"休眠异常，退出程序：{e}", "red")
         exit()
-
-
-# 日志名称
-log_name = str(datetime.datetime.now().strftime("%Y年%m月%d日_%H时%M分%S秒"))
 
 
 def save_log(text):

@@ -1,5 +1,6 @@
 from myTools import *
 from identify import *
+import os
 
 
 def open_ymzx():
@@ -9,122 +10,32 @@ def open_ymzx():
     sleep(1)
 
 
-def go_to_farm():
-    """走到农场"""
-    pyautogui.press("r", presses=2, interval=0.5)
-    print_log("开始走到农场...")
-    pyautogui.keyDown("w")
-    pyautogui.keyDown("a")
-    sleep(4.2)
-    pyautogui.keyUp("a")
-    sleep(0.3)
-    pyautogui.keyUp("w")
-    print_log("到达农场", "green")
-    sleep(1)
-
-
-def go_to_pasture():
-    """走到牧场"""
-    pyautogui.press("r")
-    print_log("开始走到牧场...")
-    pyautogui.keyDown("w")
-    sleep(0.8)
-    pyautogui.keyDown("d")
-    sleep(1.2)
-    pyautogui.keyUp("w")
-    pyautogui.keyUp("d")
-    print_log("到达牧场", "green")
-    # sleep(1)
-
-
-def go_to_fishpond():
-    """走到鱼塘"""
-    pyautogui.press("r", presses=2, interval=0.5)
-    print_log("开始走到鱼塘...")
-    pyautogui.keyDown("w")
-    pyautogui.keyDown("a")
-    sleep(0.6)
-    pyautogui.keyUp("a")
-    sleep(5.8)
-    pyautogui.keyUp("w")
-    print_log("到达鱼塘", "green")
-    # sleep(1)
-
-
 def find_drone():
     """寻找无人机"""
     # 重置位置后，按下a键一秒钟
-    pyautogui.press("r", presses=2, interval=0.5)
+    x, y = lgf_config["reset"]
+    pyautogui.click(x=x, y=y, clicks=2, interval=0.5)
     print_log("寻找无人机")
     pyautogui.keyDown("a")
     sleep(1)
     pyautogui.keyUp("a")
 
 
-def farm_work():
-    """无人机前往农场"""
-    start_time = datetime.datetime.now()
+def drone_work():
+    """无人机工作"""
     find_drone()
-    print_log("无人机前往农场工作")
-    pyautogui.press("Q")
-    return start_time
-
-
-def pasture_work():
-    """无人机前往牧场"""
-    find_drone()
-    print_log("无人机前往牧场工作")
-    pyautogui.press("E")
-
-
-def fishpond_work():
-    """无人机前往鱼塘"""
-    find_drone()
-    print_log("无人机前往鱼塘工作")
-    pyautogui.press("F")
-    pyautogui.press("g", presses=60, interval=0.2)
-
-
-def fishing(num=2):
-    """开始钓鱼"""
-    for i in range(int(num)):
-        try:
-            print_log("检测能否钓鱼")
-            identify_img("fishpond_level", 0.8)
-            print_log("不能钓鱼", "red")
-        except:
-            print_log("可以钓鱼", "green")
-            print_log("开始第{}次钓鱼".format(i + 1), "green")
-            pyautogui.press("space")
-            print_log("等待上鱼...")
-            sleep(6)
-            print_log("开始抬竿")
-            pyautogui.press("space")
-            # print_log("等待7秒")
-            # sleep(7)
-            print_log("跳过钓鱼结算界面")
-            pyautogui.press("g", presses=35, interval=0.2)
-            sleep(1)
-
-    print_log("执行撒饵", "green")
-    pyautogui.press("space")
-    print_log("钓鱼完成", "green")
-
-
-def baiting():
-    """撒饵"""
-    try:
-        print_log("检测是否撒饵")
-        identify_img("fishpond_level", 0.8)
-        print_log("撒饵成功", "green")
-        return
-    except:
-        print_log("已经撒饵", "green")
+    print_log("无人机开始工作")
+    x, y = lgf_config["drone_btn"]
+    pyautogui.leftClick(x=x, y=y)
 
 
 def fishpond():
     """收获渔场"""
-    go_to_fishpond()
+    find_drone()
+    for _ in range(2):
+        x, y = lgf_config["toggle_left"]
+        pyautogui.click(x=x, y=y)
+        sleep(0.5)
     try:
         print_log("正在识别鱼塘成熟时间...")
         screenshot_save("fishpond")
@@ -136,37 +47,33 @@ def fishpond():
                 "等待{}秒后开始钓鱼具体时间为{}".format(t, specific_time), "green"
             )
             sleep(t)
-            fishpond_work()
+            drone_work()
             return True
         else:
             print_log("等待时间超过360秒，跳过", "red")
+            drone_work()
             return False
     except:
-        fishpond_work()
-        return True
+        drone_work()
+        return False
 
 
 def start():
     print_log("开始运行", "green")
-    # mac用户
-    open_ymzx()
-    # windows用户
-    # print_log("请在5秒内打开元梦之星")
-    # sleep(5)
     while not exit_event.is_set():
+        # open_ymzx()
+        sleep(3)
         start_time = datetime.datetime.now()
+        x, y = lgf_config["blank"]
+        pyautogui.leftClick(x=x, y=y)
+        pyautogui.click(x=x, y=y, clicks=5, interval=0.2)
         # 执行鱼塘工作
         if fishpond():
             start_time = datetime.datetime.now()
-        # 执行牧场工作
-        pasture_work()
-        sleep(30)
-        # 执行农场工作
-        farm_work()
         # 计算耗时
         end_time = datetime.datetime.now()
         computation_time = end_time - start_time
-        t = 540 - computation_time.total_seconds()
+        t = lgf_config["loops"] - computation_time.total_seconds()
         print_log(
             "本次任务耗时：{}秒，休息{}秒，".format(
                 round((computation_time).total_seconds(), 2), t
