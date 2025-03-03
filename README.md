@@ -14,7 +14,7 @@
 
 ## 前置条件
 
-1. 安装.NET 桌面运行时8.0
+1. 安装[.NET 桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)8.0
 2. 安装微软Edge浏览器最新版
 
 ## 如何使用
