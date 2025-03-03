@@ -1,9 +1,0 @@
-paddlepaddle
-paddleocr
-pywebview
-pywin32
-pynput
-cefpython3
-pyinstaller
-backports.inspect
-pygetwindow
