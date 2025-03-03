@@ -1,16 +1,8 @@
 # 元梦之星全自动星宝农场-Windows版
 
-这是一个用Python写的自动收获星宝农场的程序（主要用于一小时作物、动物、鱼饵）
+这是一个用C#写的自动收获星宝农场的程序（主要用于一小时作物、动物、鱼饵）
 
-支持腾讯腾讯先锋云游戏（支持多开）、应用宝（理论上支持，但是不知道怎么多开）
-
-不支持腾讯手游助手、不支持qq模拟器
-
-该程序主要使用了pywin32、paddlepaddle、paddleocr库，使用该程序需要拥有一定的编程基础。
-
-本程序在windows10、Windows11上运行正常。
-
-使用的Python版本为3.12.4、3.8.6
+使用JavaScript代码注入的方式运行、支持多开
 
 ## 注意事项
 
@@ -22,40 +14,12 @@
 
 ## 前置条件
 
-1. 安装python，安装对应的库，进入letsgo-farm文件夹，在终端中输入如下命令：
-   ```shell
-   pip3 install -r requirements.txt
-   ```
-   如果长时间没有安装完成，请换成国内源(任选其一)：
-   ```shell
-   pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
-   ```
-   ```shell
-   pip3 install -r requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple
-   ```
-   ```shell
-   pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-   ```
-   ```shell
-   pip3 install -r requirements.txt -i https://pypi.douban.com/simple
-   ```
-   ```shell
-   pip3 install -r requirements.txt -i https://pypi.mirrors.ustc.edu.cn/simple
-   ```
-
-2. 安装Edge浏览器（系统一般自带）
-
-3. 进入open-multiple文件夹，运行open-multiple.bat
-
-4. 输入1之后再输入需要多开的数量
-5. 再次运行open-multiple.bat，输入2
-6. 再次运行open-multiple.bat，输入3
+1. 安装.NET 桌面运行时8.0
+2. 安装微软Edge浏览器最新版
 
 ## 如何使用
 
-1. 打开桌面上的元梦之星
-2. 登陆账号进入农场
-3. 运行程序（main.py）
+1. 解压后双击运行**LetsgoFarm-Web.exe**
 
 ## 郑重声明
 
