@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>True</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<!-- 配置图标 -->
+		<ApplicationIcon>Properties\app.ico</ApplicationIcon>
+		<!-- 动态版本号配置 -->
+		<Authors>张瓜皮</Authors>
+		<Title>星宝农场自动化免费版</Title>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<Copyright>Copyright ©2025 张瓜皮</Copyright>
+		<Description>此程序已开源，如果您是购买的，请退款并差评</Description>
+		<Version>$([System.DateTime]::Now.ToString(yy.MM.dd.H))</Version>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<Company>None</Company>
+		<!-- 启用WPF -->
+		<UseWPF>True</UseWPF>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Properties\main.js" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Properties\app.ico" />
+		<EmbeddedResource Include="Properties\main.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3124.44" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<Using Include="System.IO" />
+	</ItemGroup>
+</Project>

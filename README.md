@@ -1,4 +1,4 @@
-# Windows版 - C#
+# Windows版
 
 使用JavaScript代码注入的方式运行、支持多开、占用内存低
 
@@ -16,8 +16,8 @@
 2. 安装微软Edge浏览器最新版
 
 ## 如何使用
-
-1. 解压后双击运行**LetsgoFarm-Web.exe**
+1. 前往**Releases**下载压缩包
+2. 解压后双击运行**LetsgoFarmAutomateFree.exe**
 
 ## 郑重声明
 
