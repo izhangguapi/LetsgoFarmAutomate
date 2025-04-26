@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright ©2025 张瓜皮")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("此程序已开源，如果您是购买的，请退款并差评")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("25.04.27.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("25.04.27.0+591006167dff036d4858f2ccd6ef577db23cce50")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("25.04.27.0+175e2e6d95ed4b067807087e779a597a614fe238")]
 [assembly: System.Reflection.AssemblyProductAttribute("LetsgoFarmAutomateFree")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LetsgoFarmAutomateFree")]
 [assembly: System.Reflection.AssemblyVersionAttribute("25.04.27.0")]

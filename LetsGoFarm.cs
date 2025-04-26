@@ -24,8 +24,7 @@ namespace LetsgoFarmAutomateFree {
             lblCountdown.Text = $"{appConfig.LoopSeconds}";
             Text = appConfig.WindowTitle;
             // 获取版本信息
-            string version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "未知版本";
-            Debug.WriteLine($"当前版本: {version}");
+            string version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "未知版本";
             Text = appConfig.WindowTitle + $" - v{version}";
             // 加载公告
             linkLabel1.Text = announcement;
@@ -75,7 +74,7 @@ namespace LetsgoFarmAutomateFree {
             }
         }
         private async void InjectScript() {
-            const string JavaScript = "LetsgoFarmAutomate.Properties.main.js";
+            const string JavaScript = "LetsgoFarmAutomateFree.Properties.main.js";
             // 注入主脚本
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(JavaScript);
             if (stream != null) {
