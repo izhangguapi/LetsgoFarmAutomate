@@ -1,6 +1,6 @@
 # 星宝农场自动化
 
-采用webview2技术将JavaScript代码注入网页，支持多开、内存占用低，更多功能请看下图
+采用webview2技术将JavaScript代码注入网页，可后台、支持多开、内存占用低，更多功能请看下图
 
 ![软件页面](https://github.com/izhangguapi/LetsgoFarmAutomate/blob/99f2080310440c46b145fa91e8482e19ea1597c4/images/main.png)
 
