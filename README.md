@@ -17,7 +17,7 @@
 
 ## 如何使用
 1. 前往**Releases**下载压缩包
-2. 解压后双击运行**LetsgoFarmAutomateFree.exe**
+2. 解压后双击运行**LetsgoFarmAutomate.exe**
 
 ## 软件使用声明
 
