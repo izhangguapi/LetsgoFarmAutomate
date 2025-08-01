@@ -1,99 +1,297 @@
-ï»¿using LetsgoFarmAutomateFree;
-using System;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace LetsgoFarmAutomateFree {
+namespace LetsgoFarmAutomate {
     public partial class LetsGoFarm :Form {
         private static AppConfig appConfig = new();
         public static AppConfig Conf => appConfig;
         private int remainingSeconds;
         private bool isTimerRunning = false;
-        private readonly string announcement = "è¯¥è½¯ä»¶å®Œå…¨å…è´¹ï¼Œå¦‚æœæ‚¨æ˜¯è´­ä¹°çš„ï¼Œè¯·å·®è¯„å¹¶é€€æ¬¾ï¼Œæ— æ‘‡æ†æ‰«ç ç™»å½•å¯ä»¥æŒ‰ä½Ctrl+é¼ æ ‡æ»šè½®ä¸Šæ”¾å¤§ï¼Œç™»å½•å®Œæˆååˆ·æ–°å¯æ¢å¤";
+        private readonly string announcement = "¹«¸æ£ºÊ¹ÓÃ¸ÃÈí¼şÇë¼ÓÈëqqÈº346787461£¬Èç¹ûÔÚÊ¹ÓÃÖĞ³öÏÖÈÎºÎÎÊÌâ£¬ÇëÂ¼ÆÁÔÚÈºÄÚ·´À¡£¬ÎŞÒ¡¸ËÉ¨ÂëµÇÂ¼¿ÉÒÔ°´×¡Ctrl+Êó±ê¹öÂÖÉÏ·Å´ó£¬µÇÂ¼Íê³ÉºóË¢ĞÂ¿É»Ö¸´";
         public LetsGoFarm() {
             InitializeComponent();
             LoadConfig();
             InitializeWebView().ConfigureAwait(false);
-        }
-        private void LoadConfig() {
-            // åŠ è½½æœ¬åœ°é…ç½®å¹¶æ˜¾ç¤º
-            appConfig = AppConfig.Load();
-            lblCountdown.Text = $"{appConfig.LoopSeconds}";
-            Text = appConfig.WindowTitle;
-            // è·å–ç‰ˆæœ¬ä¿¡æ¯
-            string version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "æœªçŸ¥ç‰ˆæœ¬";
-            Text = appConfig.WindowTitle + $" - v{version}";
-            // åŠ è½½å…¬å‘Š
+            // ¼ÓÔØ¹«¸æ
             linkLabel1.Text = announcement;
             OutputLog(announcement, Color.Red);
         }
-        // å®šä¹‰å€’è®¡æ—¶æ€»æ—¶é•¿ï¼ˆå•ä½ï¼šç§’ï¼‰
+        /// <summary>
+        /// ¼ÓÔØÅäÖÃÎÄ¼ş
+        /// </summary>
+        private void LoadConfig() {
+            // ¼ÓÔØ±¾µØÅäÖÃ²¢ÏÔÊ¾
+            appConfig = AppConfig.Load();
+            lblCountdown.Text = $"{appConfig.LoopSeconds}";
+            // »ñÈ¡°æ±¾ĞÅÏ¢
+            string version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Î´Öª°æ±¾";
+            // ¼ÓÔØ´°¿Ú±êÌâ
+            Text = appConfig.WindowTitle + $" - v{version}";
+        }
+        /// <summary>
+        /// ³õÊ¼»¯WebView2¿Ø¼ş
+        /// </summary>
+        /// <returns></returns>
         private async Task InitializeWebView() {
             try {
-                await webView.EnsureCoreWebView2Async();
-                webView.Source = new Uri("https://gamer.qq.com/v2/game/96897");
+                // È·±£³õÊ¼»¯Íê³É
+                await webView.EnsureCoreWebView2Async(null);
+                // ¿ªÆô×Ô¶¯±£´æÃÜÂë
                 webView.CoreWebView2.Settings.IsPasswordAutosaveEnabled = true;
                 webView.CoreWebView2.Settings.IsGeneralAutofillEnabled = true;
-                await AutoiInjectScript();
+
+                // WebMessage¿çÆ½Ì¨Í¨Ñ¶
+                webView.CoreWebView2.WebMessageReceived += async (s, e) => {
+                    string rawMessage = e.TryGetWebMessageAsString();
+
+                    try {
+                        // ½âÎö JSON Êı¾İ
+                        var message = JsonConvert.DeserializeObject<dynamic>(rawMessage)!;
+
+                        // ÌáÈ¡ÏûÏ¢ÄÚÈİºÍÑÕÉ«
+                        string text = message.text;
+                        string colorName = message.color;
+                        // ½«ÑÕÉ«×Ö·û´®×ª»»ÎªColor¶ÔÏó
+                        Color logColor = Color.FromName(colorName);
+                        // Èç¹ûÑÕÉ«Ãû³ÆÎŞĞ§£¨ÈçÎ´ÖªÃû³Æ£©£¬Ê¹ÓÃÄ¬ÈÏÑÕÉ«
+                        if (!logColor.IsKnownColor) {
+                            logColor = Color.Black; // Ä¬ÈÏºìÉ«
+                        }
+                        if (text == "REFRESH") {
+                            OutputLog("Ë¢ĞÂÒ»ÏÂ", Color.Green);
+                            await AutoiInjectScript();
+                        } else {
+                            OutputLog(text, logColor);
+                        }
+                    } catch {
+                        // ¼æÈİ¾É°æµ¥×Ö·û´®ÏûÏ¢
+                        if (rawMessage == "REFRESH") {
+                            OutputLog("Ë¢ĞÂÒ»ÏÂ", Color.Green);
+                            await AutoiInjectScript();
+                        } else {
+                            OutputLog(rawMessage, Color.Red);
+                        }
+                    }
+                };
+                // ¼ÓÔØÓÎÏ·Ò³Ãæ
+                webView.Source = new Uri("https://gamer.qq.com/v2/game/96897");
+                // µ÷ÊÔÄ£Ê½
+#if DEBUG
+                // ´ò¿ª¿ª·¢Õß¹¤¾ß
+                webView.CoreWebView2.OpenDevToolsWindow();
+#endif
             } catch (Exception ex) {
-                MessageBox.Show($"WebView2åˆå§‹åŒ–å¤±è´¥: {ex.Message}");
+                OutputLog($"WebView2³õÊ¼»¯Ê§°Ü: {ex.Message}", Color.Red);
+            }
+            // ×Ô¶¯×¢Èë½Å±¾
+            await AutoiInjectScript(false);
+        }
+
+        /// <summary>
+        /// Ë¢ĞÂ°´Å¥µã»÷ÊÂ¼ş£¬ÖØĞÂ¼ÓÔØWebView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnRefresh_Click(object sender, EventArgs e) {
+            timerCountdown.Stop();
+            isTimerRunning = false;
+            btnRun.BackColor = Color.FromArgb(128, 255, 128);
+            btnRun.Text = "ÔËĞĞ";
+            OutputLog("ÒÑË¢ĞÂ£¬½Å±¾ÔİÍ£ÔËĞĞ");
+            _ = AutoiInjectScript();
+        }
+        /// <summary>
+        /// ÔËĞĞ°´Å¥µã»÷ÊÂ¼ş£¬¿ØÖÆ½Å±¾µÄÔËĞĞºÍÔİÍ£
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnRun_Click(object sender, EventArgs e) {
+            if (isTimerRunning) {
+                timerCountdown.Stop();
+                timerDaily.Stop();
+                OutputLog("ÔİÍ£ÔËĞĞ", Color.Red);
+                btnRun.BackColor = Color.FromArgb(128, 255, 128);
+                btnRun.Text = "ÔËĞĞ";
+            } else {
+                // ³õÊ¼»¯µ¹¼ÆÊ±²¢Æô¶¯
+                btnRun.BackColor = Color.FromArgb(255, 128, 128);
+                btnRun.Text = "ÔİÍ£";
+                // Æô¶¯µ¹¼ÆÊ±
+                timerCountdown.Start();
+                if (appConfig.Pray || appConfig.Aquarium || appConfig.Hotspring) {
+                    // Æô¶¯Ã¿ÈÕ¶¨Ê±Æ÷
+                    timerDaily.Start();
+                }
+                OutputLog("¿ªÊ¼ÔËĞĞ", Color.Green);
+            }
+            isTimerRunning = !isTimerRunning;
+        }
+        /// <summary>
+        /// ×¢Èë½Å±¾·½·¨£¬¼ÓÔØ²¢Ö´ĞĞÖ÷½Å±¾ºÍ¼àÌı½Å±¾
+        /// </summary>
+        private async void InjectScript() {
+            const string mainScript = "LetsgoFarmAutomate.Properties.main.js";
+            const string toolsScript = "LetsgoFarmAutomate.Properties.tools.js";
+
+            try {
+                // Ö÷½Å±¾
+                var mainCode = await LoadScriptAsync(mainScript);
+                // ¹¤¾ß½Å±¾
+                var toolsCode = await LoadScriptAsync(toolsScript);
+                // ÅĞ¶Ï½Å±¾ÊÇ·ñ²»Îª¿Õ
+                if (!string.IsNullOrEmpty(toolsCode) && !string.IsNullOrEmpty(mainCode)) {
+                    // ÅĞ¶ÏSendKeyÊÇ·ñ´æÔÚ
+                    if (appConfig.CheckSendKey) {
+                        toolsCode = $"let currentSendKey = '{appConfig.SendKey}';" + toolsCode;
+                        OutputLog("SendKeyÒÑÌîĞ´", Color.Green);
+                    }
+                    await webView.CoreWebView2.ExecuteScriptAsync(mainCode + toolsCode);
+                    OutputLog("½Å±¾ÒÑ×¢Èë£¬Çë¼ì²é×óÉÏ½Ç'ÍøÂçÑÓ³Ù'´¦µÄ'´´½¨¿ì½İ·½Ê½'ÊÇ·ñÏûÊ§", Color.Green);
+                }
+            } catch (Exception ex) {
+                OutputLog($"½Å±¾×¢ÈëÊ§°Ü: {ex.Message}", Color.Red);
             }
         }
-        // å®šæ—¶å™¨è§¦å‘äº‹ä»¶
-        private async void TimerCountdown_Tick(object sender, EventArgs e) {
+        /// <summary>
+        /// ¼ÓÔØÇ¶Èë×ÊÔ´½Å±¾
+        /// </summary>
+        /// <param name="resourceName"></param>
+        /// <returns></returns>
+        private async Task<string?> LoadScriptAsync(string resourceName) {
+            try {
+                await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+                if (stream != null) {
+                    return await new StreamReader(stream).ReadToEndAsync();
+                }
+                OutputLog($"ÕÒ²»µ½½Å±¾×ÊÔ´: {resourceName}", Color.Red);
+                return null;
+            } catch (Exception ex) {
+                OutputLog($"¼ÓÔØ½Å±¾Ê§°Ü({resourceName}): {ex.Message}", Color.Red);
+                return null;
+            }
+        }
+        /// <summary>
+        /// ×¢Èë½Å±¾°´Å¥µã»÷ÊÂ¼ş
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void BtnInjectScript_Click(object sender, EventArgs e) {
+        //    InjectScript();
+        //}
+        /// <summary>
+        /// ÉèÖÃ°´Å¥µã»÷ÊÂ¼ş£¬´ò¿ªÉèÖÃ´°¿Ú
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSetting_Click(object sender, EventArgs e) {
+            using var settingsForm = new Settings();
+            if (settingsForm.ShowDialog() == DialogResult.OK) {
+                OutputLog("ÉèÖÃÒÑ±£´æ", Color.Green);
+                // ÖØĞÂ¼ÓÔØÅäÖÃ
+                LoadConfig();
+            }
+        }
+        /// <summary>
+        /// ×Ô¶¯×¢ÈëJS½Å±¾£¬²ÎÊıÓ°ÏìºóĞøÖ´ĞĞµÄ½Å±¾
+        /// </summary>
+        /// <param name="js">×¢Èë½Å±¾ºóÔËĞĞµÄ½Å±¾º¯Êı</param>
+        /// <param name="ms">×¢Èë½Å±¾ºóµÈ´ı¶àÉÙºÁÃë</param>
+        /// <returns></returns>
+        private async Task AutoiInjectScript(bool reload = true) {
+            if (reload) {
+                webView.CoreWebView2.Reload();
+            }
+            OutputLog($"{appConfig.AutoiInjectSeconds}Ãëºó×Ô¶¯×¢Èë½Å±¾");
+            await Task.Delay(appConfig.AutoiInjectSeconds * 1000);
+            InjectScript();
+        }
+        /// <summary>
+        /// µ¹¼ÆÊ±Æ÷ÊÂ¼ş,ÓÃÓÚÖ´ĞĞÎŞÈË»ú¿ØÖÆ´úÂë
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void TimerCountdown_Tick(object? sender, EventArgs e) {
             remainingSeconds--;
             if (remainingSeconds < 0) {
-                await ExecuteDroneCode();
                 remainingSeconds = appConfig.LoopSeconds;
-                timerCountdown.Start();
+                // ÅäÖÃµ¹¼ÆÊ±½áÊøÊÇ·ñË¢ĞÂ
+                if (appConfig.IsRefresh) {
+                    await AutoiInjectScript();
+                }
+                // ×¢Èë½Å±¾
+                await webView.CoreWebView2.ExecuteScriptAsync("window.postMessage({ action: 'runDrone' }, '*');");
             } else {
                 lblCountdown.Text = $"{remainingSeconds}";
             }
         }
         /// <summary>
-        /// è‡ªåŠ¨æ³¨å…¥JSè„šæœ¬ï¼Œå‚æ•°å½±å“åç»­æ‰§è¡Œçš„è„šæœ¬
+        /// Ã¿ÈÕ¶¨Ê±Æ÷ÊÂ¼ş,ÓÃÓÚÖ´ĞĞÃ¿ÈÕ¶¨Ê±ÈÎÎñ
         /// </summary>
-        /// <param name="js">æ³¨å…¥è„šæœ¬åè¿è¡Œçš„è„šæœ¬å‡½æ•°</param>
-        /// <param name="ms">æ³¨å…¥è„šæœ¬åç­‰å¾…å¤šå°‘æ¯«ç§’</param>
-        /// <returns></returns>
-        private async Task AutoiInjectScript() {
-            OutputLog($"{appConfig.AutoiInjectSeconds}ç§’åè‡ªåŠ¨æ³¨å…¥è„šæœ¬");
-            await Task.Delay(appConfig.AutoiInjectSeconds * 1000);
-            InjectScript();
-        }
-        // æ‰§è¡Œæ— äººæœºæ§åˆ¶ä»£ç 
-        private async Task ExecuteDroneCode() {
-            try {
-                string code1 = "runDrone();";
-                await webView.CoreWebView2.ExecuteScriptAsync(code1);
-            } catch (Exception ex) {
-                MessageBox.Show($"æ‰§è¡Œè„šæœ¬å¤±è´¥: {ex.Message}");
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void TimerDaily_Tick(object? sender, EventArgs e) {
+            string nowTimeStr = DateTime.Now.ToString("HH:mm");
+            TimeSpan nowTime = TimeSpan.Parse(nowTimeStr);
+            if (appConfig.PrayGold) { }
+            if (appConfig.Pray & nowTime == appConfig.PrayTime) {
+                string js = "window.postMessage({ action: 'pray' ,params: [" + appConfig.PrayGold.ToString().ToLower() + "]}, '*');";
+                await webView.CoreWebView2.ExecuteScriptAsync(js);
+                string type = appConfig.PrayGold ? "½ğ±Ò " : "¾­Ñé";
+                OutputLog("ÉñÅ©ĞíÔ¸¼ÓÈë¶ÓÁĞ£¬Ñ¡ÔñµÄÊÇ" + type + "£¬ÇëÎğÂÒ¶¯", Color.Orange);
+            }
+            if (appConfig.Aquarium & nowTime == appConfig.AquariumTime1 || nowTime == appConfig.AquariumTime2) {
+                string js = "window.postMessage({ action: 'aquarium' }, '*');";
+                await webView.CoreWebView2.ExecuteScriptAsync(js);
+                OutputLog("ÊÕ»ñË®×åÏä¼ÓÈë¶ÓÁĞ£¬ÇëÎğÂÒ¶¯", Color.Orange);
+            }
+            if (appConfig.Hotspring & nowTime == appConfig.HotspringTime) {
+                string tea = appConfig.Tea ? "Ñ¡ÔñºÈ²è" : "Ñ¡Ôñ²»ºÈ²è";
+                string frienduid = appConfig.FriendUID!.Length > 0 ? "½øºÃÓÑ¼ÒÅİÎÂÈª£¨appConfig.FriendUID£©" : "ÔÚ×Ô¼ÒÅİÎÂÈª";
+                string js = "window.postMessage({ action: 'hotspring' ,params: [" + appConfig.Tea.ToString().ToLower() + "," + appConfig.FriendUID + "]}, '*');";
+                await webView.CoreWebView2.ExecuteScriptAsync(js);
+                OutputLog($"ÅİÎÂÈª¼ÓÈë¶ÓÁĞ£¬{tea}£¬{frienduid}£¬ÇëÎğÂÒ¶¯", Color.Orange);
             }
         }
-        private async void InjectScript() {
-            const string JavaScript = "LetsgoFarmAutomateFree.Properties.main.js";
-            // æ³¨å…¥ä¸»è„šæœ¬
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(JavaScript);
-            if (stream != null) {
-                var jsCode = await new StreamReader(stream!).ReadToEndAsync();
-                await webView.CoreWebView2.ExecuteScriptAsync(jsCode);
-                OutputLog("è„šæœ¬å·²æ³¨å…¥ï¼Œè¯·æ£€æŸ¥å·¦ä¸Šè§’'ç½‘ç»œå»¶è¿Ÿ'å¤„çš„'åˆ›å»ºå¿«æ·æ–¹å¼'æ˜¯å¦æ¶ˆå¤±", Color.Green);
-            } else { 
-                OutputLog("æœªæ‰¾åˆ°è„šæœ¬", Color.Red);
-            }
+        /// <summary>
+        /// ½ûÖ¹»ò»Ö¸´WebViewµÄ¿ØÖÆ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDisableWebview_Click(object sender, EventArgs e) {
+            //µ÷ÊÔ
+#if DEBUG
 
+#endif
+
+            if (webView.Enabled) {
+                btnDisableWebview.Text = "»Ö¸´¿ØÖÆ";
+            } else {
+                btnDisableWebview.Text = "½ûÖ¹¿ØÖÆ";
+            }
+            webView.Enabled = !webView.Enabled;
         }
-        private void Settings_Click(object sender, EventArgs e) {
-            using (var settingsForm = new Settings()) {
-                if (settingsForm.ShowDialog() == DialogResult.OK) {
-                    // é‡æ–°åŠ è½½é…ç½®
-                    LoadConfig();
-                }
+        /// <summary>
+        /// ÏÔÊ¾»òÒş²ØÈÕÖ¾
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnLog_Click(object sender, EventArgs e) {
+            richTextBoxLog.Visible = !richTextBoxLog.Visible;
+            if (richTextBoxLog.Visible) {
+                btnLog.Text = "Òş²ØÈÕÖ¾";
+                Height += 142;
+                MinimumSize = new Size(816, 661);
+            } else {
+                btnLog.Text = "ÏÔÊ¾ÈÕÖ¾";
+                MinimumSize = new Size(816, 519);
+                Height += -142;
             }
         }
+        // ÖØÔØ·½·¨±£³ÖÏòºó¼æÈİ
         private void OutputLog(string text) => OutputLog(text, Color.Black);
 
         private void OutputLog(string text, Color color) {
@@ -104,12 +302,12 @@ namespace LetsgoFarmAutomateFree {
             string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string logContent = $"{now} - {text}\r\n";
 
-            // ä¿å­˜åŸå§‹é¢œè‰²
+            // ±£´æÔ­Ê¼ÑÕÉ«
             Color originalColor = richTextBoxLog.SelectionColor;
 
             try {
-                // å…³é”®ä¿®å¤ï¼šå…ˆå®šä½åˆ°æœ«å°¾å†è®¾ç½®é¢œè‰²
-                richTextBoxLog.SelectionStart = richTextBoxLog.TextLength; // â† æ–°å¢è¿™è¡Œ
+                // ¹Ø¼üĞŞ¸´£ºÏÈ¶¨Î»µ½Ä©Î²ÔÙÉèÖÃÑÕÉ«
+                richTextBoxLog.SelectionStart = richTextBoxLog.TextLength; // ¡û ĞÂÔöÕâĞĞ
                 richTextBoxLog.SelectionColor = color;
                 richTextBoxLog.AppendText(logContent);
             } finally {
@@ -118,76 +316,12 @@ namespace LetsgoFarmAutomateFree {
                 richTextBoxLog.ScrollToCaret();
             }
         }
-        /// <summary>
-        /// ç¦æ­¢æˆ–æ¢å¤WebViewçš„æ§åˆ¶
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnDisableWebview_Click(object sender, EventArgs e) {
-            if (webView.Enabled) {
-                btnDisableWebview.Text = "æ¢å¤æ§åˆ¶";
-            } else {
-                btnDisableWebview.Text = "ç¦æ­¢æ§åˆ¶";
-            }
-            webView.Enabled = !webView.Enabled;
-        }
-        private void BtnSetting_Click(object sender, EventArgs e) {
-            using var settingsForm = new Settings();
-            if (settingsForm.ShowDialog() == DialogResult.OK) {
-                OutputLog("è®¾ç½®å·²ä¿å­˜", Color.Green);
-                // é‡æ–°åŠ è½½é…ç½®
-                LoadConfig();
-            }
-        }
-        /// <summary>
-        /// è¿è¡ŒæŒ‰é’®ç‚¹å‡»äº‹ä»¶ï¼Œæ§åˆ¶è„šæœ¬çš„è¿è¡Œå’Œæš‚åœ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnRun_Click(object sender, EventArgs e) {
-            if (isTimerRunning) {
-                timerCountdown.Stop();
-                OutputLog("æš‚åœè¿è¡Œ", Color.Red);
-                btnRun.BackColor = Color.FromArgb(128, 255, 128);
-                btnRun.Text = "è¿è¡Œ";
-            } else {
-                // åˆå§‹åŒ–å€’è®¡æ—¶å¹¶å¯åŠ¨
-                btnRun.BackColor = Color.FromArgb(255, 128, 128);
-                btnRun.Text = "æš‚åœ";
-                // å¯åŠ¨å€’è®¡æ—¶
-                timerCountdown.Start();
-                OutputLog("å¼€å§‹è¿è¡Œ", Color.Green);
-            }
-            isTimerRunning = !isTimerRunning;
-        }
-        /// <summary>
-        /// åˆ·æ–°æŒ‰é’®ç‚¹å‡»äº‹ä»¶ï¼Œé‡æ–°åŠ è½½WebView
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnRefresh_Click(object sender, EventArgs e) {
-            timerCountdown.Stop();
-            isTimerRunning = false;
-            btnRun.BackColor = Color.FromArgb(128, 255, 128);
-            btnRun.Text = "è¿è¡Œ";
-            OutputLog("å·²åˆ·æ–°ï¼Œè„šæœ¬æš‚åœè¿è¡Œ");
-        }
-        /// <summary>
-        /// æ˜¾ç¤ºæˆ–éšè—æ—¥å¿—
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnLog_Click(object sender, EventArgs e) {
-            richTextBoxLog.Visible = !richTextBoxLog.Visible;
-            Height += richTextBoxLog.Visible ? 142 : -142;
-            btnLog.Text = richTextBoxLog.Visible ? "éšè—æ—¥å¿—" : "æ˜¾ç¤ºæ—¥å¿—";
-        }
+
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             Process.Start(new ProcessStartInfo {
-                FileName = "https://github.com/izhangguapi/letsgo-farm",
+                FileName = "https://qm.qq.com/cgi-bin/qm/qr?k=YDhhDTpz4JhzBCK0_IjuGHo-fmmVhZnI&jump_from=webapi&authKey=J6nWJ2UpCzp3Z/56yCerGx7PQcqtIHaKGUMjASht9aCUQu58rBMQtC/tCRZrwXk6",
                 UseShellExecute = true
             });
         }
-
     }
 }

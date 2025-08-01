@@ -1,25 +1,19 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Windows.Forms;
 
-namespace LetsgoFarmAutomateFree
-{
-    partial class LetsGoFarm
-    {
+namespace LetsgoFarmAutomate {
+    partial class LetsGoFarm {
         /// <summary>
-        /// 必需的设计器变量。
+        ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// 清理所有正在使用的资源。
+        ///  Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -40,16 +34,18 @@ namespace LetsgoFarmAutomateFree
                 e.Cancel = true;
             }
         }
-        #region Windows 窗体设计器生成的代码
+
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// 设计器支持所需的方法 - 不要修改
-        /// 使用代码编辑器修改此方法的内容。
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
             components = new Container();
             ComponentResourceManager resources = new ComponentResourceManager(typeof(LetsGoFarm));
             timerCountdown = new System.Windows.Forms.Timer(components);
+            timerDaily = new System.Windows.Forms.Timer(components);
             webView = new Microsoft.Web.WebView2.WinForms.WebView2();
             panel1 = new Panel();
             btnDisableWebview = new Button();
@@ -69,6 +65,11 @@ namespace LetsgoFarmAutomateFree
             timerCountdown.Interval = 1000;
             timerCountdown.Tick += TimerCountdown_Tick;
             // 
+            // timerDaily
+            // 
+            timerDaily.Interval = 60000;
+            timerDaily.Tick += TimerDaily_Tick;
+            // 
             // webView
             // 
             webView.AllowExternalDrop = true;
@@ -78,7 +79,7 @@ namespace LetsgoFarmAutomateFree
             webView.Location = new Point(0, 30);
             webView.Margin = new Padding(0);
             webView.Name = "webView";
-            webView.Size = new Size(1200, 503);
+            webView.Size = new Size(1200, 675);
             webView.TabIndex = 1;
             webView.TabStop = false;
             webView.ZoomFactor = 1D;
@@ -130,7 +131,6 @@ namespace LetsgoFarmAutomateFree
             lblCountdown.Name = "lblCountdown";
             lblCountdown.Size = new Size(30, 26);
             lblCountdown.TabIndex = 6;
-            lblCountdown.Text = "124";
             lblCountdown.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // linkLabel1
@@ -165,7 +165,7 @@ namespace LetsgoFarmAutomateFree
             btnLog.Name = "btnLog";
             btnLog.Size = new Size(65, 26);
             btnLog.TabIndex = 1;
-            btnLog.Text = "显示日志";
+            btnLog.Text = "隐藏日志";
             btnLog.UseVisualStyleBackColor = false;
             btnLog.Click += BtnLog_Click;
             // 
@@ -185,7 +185,7 @@ namespace LetsgoFarmAutomateFree
             // 
             richTextBoxLog.BorderStyle = BorderStyle.None;
             richTextBoxLog.Dock = DockStyle.Bottom;
-            richTextBoxLog.Location = new Point(0, 533);
+            richTextBoxLog.Location = new Point(0, 705);
             richTextBoxLog.Margin = new Padding(0);
             richTextBoxLog.Name = "richTextBoxLog";
             richTextBoxLog.ReadOnly = true;
@@ -193,19 +193,18 @@ namespace LetsgoFarmAutomateFree
             richTextBoxLog.TabIndex = 2;
             richTextBoxLog.TabStop = false;
             richTextBoxLog.Text = "";
-            richTextBoxLog.Visible = false;
             // 
             // LetsGoFarm
             // 
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(1200, 675);
+            ClientSize = new Size(1200, 847);
             Controls.Add(webView);
             Controls.Add(panel1);
             Controls.Add(richTextBoxLog);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MinimizeBox = false;
-            MinimumSize = new Size(816, 519);
+            MinimumSize = new Size(816, 661);
             Name = "LetsGoFarm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "星宝农场自动化";
@@ -214,12 +213,13 @@ namespace LetsgoFarmAutomateFree
             ResumeLayout(false);
         }
 
-
         #endregion
         private Microsoft.Web.WebView2.WinForms.WebView2 webView;
         private System.Windows.Forms.Timer timerCountdown;
+        private System.Windows.Forms.Timer timerDaily;
         private Panel panel1;
         private Label lblCountdown;
+        //private Button btnInjectScript;
         private Button btnRun;
         private Button btnRefresh;
         private Button btnLog;
@@ -229,4 +229,3 @@ namespace LetsgoFarmAutomateFree
         private LinkLabel linkLabel1;
     }
 }
-

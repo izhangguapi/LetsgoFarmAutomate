@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-      "Microsoft.Web.WebView2/1.0.3124.44": {
+      "Microsoft.Web.WebView2/1.0.3240.44": {
         "type": "package",
         "build": {
           "buildTransitive/Microsoft.Web.WebView2.targets": {}
@@ -38,10 +38,10 @@
     }
   },
   "libraries": {
-    "Microsoft.Web.WebView2/1.0.3124.44": {
-      "sha512": "sQb+ACD3ILvHxztxqCWLbhYmFNf5dH0HPhVKFYg020rpeQPkadH0nkVOSsgfSyBDMLypI9iMBeD6uVcVxsKLkg==",
+    "Microsoft.Web.WebView2/1.0.3240.44": {
+      "sha512": "5NWh8SVJy8QOdT0p2CkZqmPHPxPdVr2SyiF+RWfNzCOb3oXoK8Y6Ze85Zw849PFMqyknU/gAgJbAiiHG+kVo6A==",
       "type": "package",
-      "path": "microsoft.web.webview2/1.0.3124.44",
+      "path": "microsoft.web.webview2/1.0.3240.44",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -87,7 +87,7 @@
         "lib_manual/netcoreapp3.0/Microsoft.Web.WebView2.WinForms.xml",
         "lib_manual/netcoreapp3.0/Microsoft.Web.WebView2.Wpf.dll",
         "lib_manual/netcoreapp3.0/Microsoft.Web.WebView2.Wpf.xml",
-        "microsoft.web.webview2.1.0.3124.44.nupkg.sha512",
+        "microsoft.web.webview2.1.0.3240.44.nupkg.sha512",
         "microsoft.web.webview2.nuspec",
         "runtimes/win-arm64/native/WebView2Loader.dll",
         "runtimes/win-arm64/native_uap/Microsoft.Web.WebView2.Core.dll",
@@ -168,7 +168,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Microsoft.Web.WebView2 >= 1.0.3124.44",
+      "Microsoft.Web.WebView2 >= 1.0.3240.44",
       "Newtonsoft.Json >= 13.0.3"
     ]
   },
@@ -176,13 +176,13 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "25.4.27",
+    "version": "25.7.29.15",
     "restore": {
-      "projectUniqueName": "G:\\GitHub\\letsgo-farm\\Windows\\LetsgoFarmAutomateFree.csproj",
-      "projectName": "LetsgoFarmAutomateFree",
-      "projectPath": "G:\\GitHub\\letsgo-farm\\Windows\\LetsgoFarmAutomateFree.csproj",
+      "projectUniqueName": "G:\\GitHub\\letsgo-farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
+      "projectName": "LetsgoFarmAutomate",
+      "projectPath": "G:\\GitHub\\letsgo-farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "G:\\GitHub\\letsgo-farm\\Windows\\obj\\",
+      "outputPath": "G:\\GitHub\\letsgo-farm\\LetsgoFarmAutomate\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -211,7 +211,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -219,7 +219,7 @@
         "dependencies": {
           "Microsoft.Web.WebView2": {
             "target": "Package",
-            "version": "[1.0.3124.44, )"
+            "version": "[1.0.3240.44, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
@@ -245,7 +245,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
