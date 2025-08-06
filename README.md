@@ -2,7 +2,7 @@
 
 采用webview2技术将JavaScript代码注入网页，可后台、支持多开、内存占用低，更多功能请看下图
 
-![软件页面](images\main.png)
+![软件页面](https://pic1.imgdb.cn/item/6893537058cb8da5c80a754a.png)
 
 ## 注意事项
 
@@ -41,7 +41,7 @@
 
 
 
-![支付宝](images\Collection.png)
+![赞赏](https://s21.ax1x.com/2025/08/06/pVUqluV.png)
 
 ## 更新日志
 
