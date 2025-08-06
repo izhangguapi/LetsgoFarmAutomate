@@ -1,9 +1,6 @@
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace LetsgoFarmAutomate {
     public partial class LetsGoFarm :Form {
@@ -11,7 +8,7 @@ namespace LetsgoFarmAutomate {
         public static AppConfig Conf => appConfig;
         private int remainingSeconds;
         private bool isTimerRunning = false;
-        private readonly string announcement = "公告：使用该软件请加入qq群346787461，如果在使用中出现任何问题，请录屏在群内反馈，无摇杆扫码登录可以按住Ctrl+鼠标滚轮上放大，登录完成后刷新可恢复";
+        private readonly string announcement = "无摇杆扫码登录可以按住Ctrl+鼠标滚轮上放大，登录完成后刷新可恢复";
         public LetsGoFarm() {
             InitializeComponent();
             LoadConfig();

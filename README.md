@@ -2,7 +2,7 @@
 
 采用webview2技术将JavaScript代码注入网页，可后台、支持多开、内存占用低，更多功能请看下图
 
-![软件页面](https://github.com/izhangguapi/LetsgoFarmAutomate/blob/99f2080310440c46b145fa91e8482e19ea1597c4/images/main.png)
+![软件页面](images\main.png)
 
 ## 注意事项
 
@@ -34,6 +34,14 @@
 5. 本软件所有功能永久免费，除作者官方提供的可选技术支援服务（如定制化安装） 外，不存在任何形式的强制收费项目。
 
 6. 本声明与软件所适用的开源许可证（如AGPL-3.0）具有同等约束力。若需商业使用授权，必须单独获得作者书面许可。
+
+
+
+## 赞赏
+
+
+
+![支付宝](images\Collection.png)
 
 ## 更新日志
 
