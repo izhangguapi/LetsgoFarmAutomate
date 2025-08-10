@@ -195,7 +195,7 @@ namespace LetsgoFarmAutomate {
             StartPosition = FormStartPosition.CenterScreen;
             Text = "星宝农场自动化";
             // 加载公告
-            //Shown += LetsGoFarm_Shown;
+            Shown += LetsGoFarm_Shown;
             ((ISupportInitialize)webView).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);
