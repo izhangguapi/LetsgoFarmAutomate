@@ -13,9 +13,11 @@ namespace LetsgoFarmAutomate {
             InitializeComponent();
             LoadConfig();
             InitializeWebView().ConfigureAwait(false);
-            // 加载公告
-            linkLabel1.Text = announcement;
-            OutputLog(announcement, Color.Red);
+        }
+        private void LetsGoFarm_Shown(object sender, EventArgs e) {
+            // 加载公告窗口
+            Announcement announcementForm = new();
+            announcementForm.ShowDialog();
         }
         /// <summary>
         /// 加载配置文件
@@ -312,13 +314,6 @@ namespace LetsgoFarmAutomate {
                 richTextBoxLog.SelectionStart = richTextBoxLog.TextLength;
                 richTextBoxLog.ScrollToCaret();
             }
-        }
-
-        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            Process.Start(new ProcessStartInfo {
-                FileName = "https://qm.qq.com/cgi-bin/qm/qr?k=YDhhDTpz4JhzBCK0_IjuGHo-fmmVhZnI&jump_from=webapi&authKey=J6nWJ2UpCzp3Z/56yCerGx7PQcqtIHaKGUMjASht9aCUQu58rBMQtC/tCRZrwXk6",
-                UseShellExecute = true
-            });
         }
     }
 }

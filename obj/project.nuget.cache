@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "u0NICW030KE=",
+  "dgSpecHash": "k2oUldfJlKc=",
   "success": true,
-  "projectFilePath": "F:\\GitHub\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
+  "projectFilePath": "F:\\GitHub\\Letsgo-Farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.web.webview2\\1.0.3240.44\\microsoft.web.webview2.1.0.3240.44.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"

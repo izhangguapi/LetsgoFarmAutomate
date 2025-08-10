@@ -51,7 +51,6 @@ namespace LetsgoFarmAutomate {
             btnDisableWebview = new Button();
             btnRun = new Button();
             lblCountdown = new Label();
-            linkLabel1 = new LinkLabel();
             btnSetting = new Button();
             btnLog = new Button();
             btnRefresh = new Button();
@@ -89,7 +88,6 @@ namespace LetsgoFarmAutomate {
             panel1.Controls.Add(btnDisableWebview);
             panel1.Controls.Add(btnRun);
             panel1.Controls.Add(lblCountdown);
-            panel1.Controls.Add(linkLabel1);
             panel1.Controls.Add(btnSetting);
             panel1.Controls.Add(btnLog);
             panel1.Controls.Add(btnRefresh);
@@ -132,18 +130,6 @@ namespace LetsgoFarmAutomate {
             lblCountdown.Size = new Size(30, 26);
             lblCountdown.TabIndex = 6;
             lblCountdown.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // linkLabel1
-            // 
-            linkLabel1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            linkLabel1.Font = new Font("Microsoft YaHei UI", 9F);
-            linkLabel1.LinkColor = Color.Red;
-            linkLabel1.Location = new Point(147, 2);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(910, 26);
-            linkLabel1.TabIndex = 7;
-            linkLabel1.TextAlign = ContentAlignment.MiddleCenter;
-            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
             // 
             // btnSetting
             // 
@@ -208,6 +194,8 @@ namespace LetsgoFarmAutomate {
             Name = "LetsGoFarm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "星宝农场自动化";
+            // 加载公告
+            //Shown += LetsGoFarm_Shown;
             ((ISupportInitialize)webView).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);
@@ -226,6 +214,5 @@ namespace LetsgoFarmAutomate {
         private Button btnDisableWebview;
         private Button btnSetting;
         private RichTextBox richTextBoxLog;
-        private LinkLabel linkLabel1;
     }
 }

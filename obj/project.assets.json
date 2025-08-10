@@ -176,13 +176,13 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "25.8.6.20",
+    "version": "25.8.10.11",
     "restore": {
-      "projectUniqueName": "F:\\GitHub\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
+      "projectUniqueName": "F:\\GitHub\\Letsgo-Farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
       "projectName": "LetsgoFarmAutomate",
-      "projectPath": "F:\\GitHub\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
+      "projectPath": "F:\\GitHub\\Letsgo-Farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "F:\\GitHub\\LetsgoFarmAutomate\\obj\\",
+      "outputPath": "F:\\GitHub\\Letsgo-Farm\\LetsgoFarmAutomate\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
