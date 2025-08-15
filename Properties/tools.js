@@ -79,6 +79,15 @@ function initGameAutoHandlers() {
   // 需要监控的元素及其处理方式
   const handlers = [
     {
+      selector: "div.el-loading-mask is-fullscreen",
+      action: (element) => {
+        element.remove();
+        callWinForms("REFRESH");
+        console.log("检测游戏重连，已刷新页面");
+        callWinForms("检测游戏重连，已刷新页面");
+      },
+    },
+    {
       selector: "div.el-message-box__wrapper",
       action: (element) => {
         element.remove();
@@ -110,8 +119,8 @@ function initGameAutoHandlers() {
     {
       selector: "#el-loading-text",
       action: () => {
-        callWinForms("检测游戏重连，执行自动刷新页面");
         callWinForms("REFRESH");
+        callWinForms("检测游戏重连，已刷新页面");
       },
     },
   ];

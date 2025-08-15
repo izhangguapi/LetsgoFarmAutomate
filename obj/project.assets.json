@@ -176,7 +176,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "25.8.10.11",
+    "version": "25.8.15.14",
     "restore": {
       "projectUniqueName": "F:\\GitHub\\Letsgo-Farm\\LetsgoFarmAutomate\\LetsgoFarmAutomate.csproj",
       "projectName": "LetsgoFarmAutomate",
@@ -245,7 +245,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
