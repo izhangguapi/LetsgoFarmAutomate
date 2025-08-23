@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace LetsgoFarmAutomate {
-    partial class LetsGoFarm {
+namespace LetsgoFarmAutomate
+{
+    partial class LetsGoFarm
+    {
         /// <summary>
         ///  Required designer variable.
         /// </summary>
@@ -12,24 +14,30 @@ namespace LetsgoFarmAutomate {
         ///  Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if (disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
         //重写关闭窗口按钮方法
-        protected override void OnClosing(CancelEventArgs e) {
+        protected override void OnClosing(CancelEventArgs e)
+        {
             //让用户选择点击
             DialogResult result = MessageBox.Show("是否退出程序？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             //判断是否取消事件
-            if (result == DialogResult.Yes) {
+            if (result == DialogResult.Yes)
+            {
                 //释放资源
                 webView?.Dispose();
                 Dispose();
                 base.OnClosing(e);
                 Application.ExitThread();
-            } else {
+            }
+            else
+            {
                 //如果选择否，则取消关闭事件
                 e.Cancel = true;
             }
@@ -100,11 +108,14 @@ namespace LetsgoFarmAutomate {
             // 
             // btnDisableWebview
             // 
+            btnDisableWebview.AutoSize = true;
+            btnDisableWebview.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnDisableWebview.BackColor = Color.FromArgb(255, 192, 128);
             btnDisableWebview.Dock = DockStyle.Right;
-            btnDisableWebview.Location = new Point(1063, 2);
+            btnDisableWebview.Font = new Font("新宋体", 9F);
+            btnDisableWebview.Location = new Point(1054, 2);
             btnDisableWebview.Name = "btnDisableWebview";
-            btnDisableWebview.Size = new Size(65, 26);
+            btnDisableWebview.Size = new Size(63, 26);
             btnDisableWebview.TabIndex = 3;
             btnDisableWebview.Text = "禁止控制";
             btnDisableWebview.UseVisualStyleBackColor = false;
@@ -112,11 +123,14 @@ namespace LetsgoFarmAutomate {
             // 
             // btnRun
             // 
+            btnRun.AutoSize = true;
+            btnRun.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnRun.BackColor = Color.FromArgb(128, 255, 128);
             btnRun.Dock = DockStyle.Right;
-            btnRun.Location = new Point(1128, 2);
+            btnRun.Font = new Font("新宋体", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnRun.Location = new Point(1117, 2);
             btnRun.Name = "btnRun";
-            btnRun.Size = new Size(40, 26);
+            btnRun.Size = new Size(39, 26);
             btnRun.TabIndex = 5;
             btnRun.Text = "运行";
             btnRun.UseVisualStyleBackColor = false;
@@ -125,19 +139,24 @@ namespace LetsgoFarmAutomate {
             // lblCountdown
             // 
             lblCountdown.Dock = DockStyle.Right;
-            lblCountdown.Location = new Point(1168, 2);
+            lblCountdown.Font = new Font("新宋体", 10F);
+            lblCountdown.Location = new Point(1156, 2);
             lblCountdown.Name = "lblCountdown";
-            lblCountdown.Size = new Size(30, 26);
+            lblCountdown.Size = new Size(42, 26);
             lblCountdown.TabIndex = 6;
+            lblCountdown.Text = "120";
             lblCountdown.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnSetting
             // 
+            btnSetting.AutoSize = true;
+            btnSetting.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnSetting.BackColor = Color.FromArgb(192, 255, 255);
             btnSetting.Dock = DockStyle.Left;
-            btnSetting.Location = new Point(107, 2);
+            btnSetting.Font = new Font("新宋体", 9F);
+            btnSetting.Location = new Point(104, 2);
             btnSetting.Name = "btnSetting";
-            btnSetting.Size = new Size(40, 26);
+            btnSetting.Size = new Size(39, 26);
             btnSetting.TabIndex = 2;
             btnSetting.Text = "设置";
             btnSetting.UseVisualStyleBackColor = false;
@@ -145,11 +164,14 @@ namespace LetsgoFarmAutomate {
             // 
             // btnLog
             // 
+            btnLog.AutoSize = true;
+            btnLog.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnLog.BackColor = Color.FromArgb(192, 255, 255);
             btnLog.Dock = DockStyle.Left;
-            btnLog.Location = new Point(42, 2);
+            btnLog.Font = new Font("新宋体", 9F);
+            btnLog.Location = new Point(41, 2);
             btnLog.Name = "btnLog";
-            btnLog.Size = new Size(65, 26);
+            btnLog.Size = new Size(63, 26);
             btnLog.TabIndex = 1;
             btnLog.Text = "隐藏日志";
             btnLog.UseVisualStyleBackColor = false;
@@ -157,11 +179,14 @@ namespace LetsgoFarmAutomate {
             // 
             // btnRefresh
             // 
+            btnRefresh.AutoSize = true;
+            btnRefresh.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnRefresh.BackColor = Color.FromArgb(192, 255, 255);
             btnRefresh.Dock = DockStyle.Left;
+            btnRefresh.Font = new Font("新宋体", 9F);
             btnRefresh.Location = new Point(2, 2);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(40, 26);
+            btnRefresh.Size = new Size(39, 26);
             btnRefresh.TabIndex = 0;
             btnRefresh.Text = "刷新";
             btnRefresh.UseVisualStyleBackColor = false;
@@ -171,6 +196,7 @@ namespace LetsgoFarmAutomate {
             // 
             richTextBoxLog.BorderStyle = BorderStyle.None;
             richTextBoxLog.Dock = DockStyle.Bottom;
+            richTextBoxLog.Font = new Font("新宋体", 9F);
             richTextBoxLog.Location = new Point(0, 705);
             richTextBoxLog.Margin = new Padding(0);
             richTextBoxLog.Name = "richTextBoxLog";
@@ -187,6 +213,7 @@ namespace LetsgoFarmAutomate {
             Controls.Add(webView);
             Controls.Add(panel1);
             Controls.Add(richTextBoxLog);
+            Font = new Font("新宋体", 9F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MinimizeBox = false;
@@ -194,10 +221,10 @@ namespace LetsgoFarmAutomate {
             Name = "LetsGoFarm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "星宝农场自动化";
-            // 加载公告
             Shown += LetsGoFarm_Shown;
             ((ISupportInitialize)webView).EndInit();
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
         }
 

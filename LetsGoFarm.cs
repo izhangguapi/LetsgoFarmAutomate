@@ -11,6 +11,8 @@ namespace LetsgoFarmAutomate {
         private readonly string announcement = "无摇杆扫码登录可以按住Ctrl+鼠标滚轮上放大，登录完成后刷新可恢复";
         public LetsGoFarm() {
             InitializeComponent();
+            // 禁用窗体自动缩放
+            AutoScaleMode = AutoScaleMode.None;
             LoadConfig();
             InitializeWebView().ConfigureAwait(false);
         }
@@ -313,6 +315,37 @@ namespace LetsgoFarmAutomate {
                 richTextBoxLog.SelectionColor = originalColor;
                 richTextBoxLog.SelectionStart = richTextBoxLog.TextLength;
                 richTextBoxLog.ScrollToCaret();
+            }
+        }
+
+
+        private void MainForm_DpiChanged(object sender, DpiChangedEventArgs e) {
+            // 当DPI变化时，重新调整字体大小
+            float scaleFactor = e.DeviceDpiNew / 96f;
+            foreach (Control control in this.Controls) {
+                AdjustControlForDpi(control, scaleFactor);
+            }
+        }
+
+        private void AdjustControlForDpi(Control control, float scaleFactor) {
+            // 递归调整所有控件的字体
+            control.Font = new Font(control.Font.FontFamily,
+                control.Font.Size * scaleFactor);
+
+            if (control is Button btn) {
+                // 对于按钮，增加一些内边距
+                btn.Padding = new Padding(
+                    (int)(10 * scaleFactor),
+                    (int)(5 * scaleFactor),
+                    (int)(10 * scaleFactor),
+                    (int)(5 * scaleFactor));
+            }
+
+            // 递归处理容器控件
+            if (control.HasChildren) {
+                foreach (Control child in control.Controls) {
+                    AdjustControlForDpi(child, scaleFactor);
+                }
             }
         }
     }

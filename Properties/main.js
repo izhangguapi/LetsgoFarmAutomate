@@ -338,8 +338,6 @@ const actionHandlers = {
     [".dw", ".g-pc-k", ".g-pc-m-tip"].forEach((selector) =>
       document.querySelector(selector)?.remove()
     );
-    // 关闭辅助屏
-    document.querySelector(".g-pc-s-v-close")?.click();
     // console.log("初始化完成");
   },
   /**

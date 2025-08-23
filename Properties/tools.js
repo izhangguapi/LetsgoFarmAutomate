@@ -102,6 +102,21 @@ function initGameAutoHandlers() {
       },
     },
     {
+      selector: "div.close-btn",
+      action: (element) => {
+        element.click();
+        console.log("检测到有元素遮挡，点击关闭");
+      },
+    },
+    {
+      // 关闭辅助屏
+      selector: ".g-pc-s-v-close",
+      action: (element) => {
+        element.click();
+        console.log("检测到有元素遮挡，点击关闭");
+      },
+    },
+    {
       selector:
         "#xf-body-tag > div:nth-child(13) > div > div:nth-child(3) > div:nth-child(3)",
       action: (element) => {

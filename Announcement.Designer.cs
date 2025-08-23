@@ -37,7 +37,7 @@
             // 
             labelTitle.AutoSize = true;
             labelTitle.Dock = DockStyle.Fill;
-            labelTitle.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            labelTitle.Font = new Font("新宋体", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 134);
             labelTitle.Location = new Point(3, 0);
             labelTitle.Name = "labelTitle";
             labelTitle.Size = new Size(528, 36);
@@ -60,7 +60,7 @@
             // 
             label1.AutoSize = true;
             label1.Dock = DockStyle.Fill;
-            label1.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            label1.Font = new Font("新宋体", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 134);
             label1.Location = new Point(3, 112);
             label1.Name = "label1";
             label1.Size = new Size(528, 36);
@@ -72,6 +72,7 @@
             // 
             labelAnnouncement.AutoSize = true;
             labelAnnouncement.Dock = DockStyle.Fill;
+            labelAnnouncement.Font = new Font("新宋体", 9F);
             labelAnnouncement.Location = new Point(3, 36);
             labelAnnouncement.Name = "labelAnnouncement";
             labelAnnouncement.Size = new Size(528, 76);
